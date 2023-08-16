@@ -27,11 +27,16 @@ public class WebConfigSecurity {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                         /* Permissão para qualquer pessoa ter acesso ao login */
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
+
+                         /* Permissões para Registros de Acesso */
                         .requestMatchers(HttpMethod.POST, "/acesso").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/acesso/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/acesso/descricao/*").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/acesso/*").hasRole("ADMIN")
+
+                         /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

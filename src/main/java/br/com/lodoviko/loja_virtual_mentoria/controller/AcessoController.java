@@ -24,9 +24,8 @@ public class AcessoController {
     @PostMapping
     public ResponseEntity<Acesso> salvarAcesso(@RequestBody Acesso acesso) throws ExceptionMentoriaJava {
 
-
-        String encryptPassowrd = new BCryptPasswordEncoder().encode("12345678");
-        System.out.println(encryptPassowrd);
+//        String encryptPassowrd = new BCryptPasswordEncoder().encode("12345678");
+//        System.out.println(encryptPassowrd);
 
         Acesso acessoSalvo = acessoService.save(acesso);
         return new ResponseEntity<Acesso>(acessoSalvo, HttpStatus.OK);
