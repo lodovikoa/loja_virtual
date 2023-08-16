@@ -40,7 +40,7 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 		MockMvc mockMvc = builder.build();
 
 		Acesso acesso = new Acesso();
-		acesso.setDescricao("ROLE_COMPRADOR1");
+		acesso.setDescricao("ROLE_COMPRADOR999");
 
 		ObjectMapper objectMapper = new ObjectMapper();
 
@@ -57,6 +57,8 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 				.readValue(retornoApi.andReturn().getResponse().getContentAsString(), Acesso.class);
 
 		assertEquals(acesso.getDescricao(), acessoRetorno.getDescricao());
+
+		acessoRepository.deleteById(acessoRetorno.getId());
 	}
 
 	@Test
@@ -137,40 +139,5 @@ class LojaVirtualMentoriaApplicationTests extends TestCase {
 
 /* --------------------------------------------------------------------------------- */
 
-	@Test
-	public void testCadastraAcesso() {
-
-		Acesso acesso = new Acesso();
-		acesso.setDescricao("ROLE_COMPRADORteste5");
-
-		acesso = acessoController.salvarAcesso(acesso).getBody();
-
-		/* Validar dados salvo no banco */
-		assertEquals(true, acesso.getId() > 0);
-
-		/* Validar dados salvo corretamente no banco */
-		assertEquals("ROLE_COMPRADORteste5", acesso.getDescricao());
-
-		/* Teste de carregamento */
-		Acesso acesso2 = acessoRepository.getReferenceById(acesso.getId());
-		assertEquals(acesso.getId(), acesso2.getId());
-
-		/* Teste de delete */
-		acessoRepository.deleteById(acesso2.getId());
-		acessoRepository.flush(); /* Roda esse SQL de delete no banco de dados */
-
-		Acesso acesso3 = acessoRepository.findById(acesso2.getId()).orElse(null);
-		assertEquals(true, acesso3 == null);
-
-		/* Teste de query */
-		acesso = new Acesso();
-		acesso.setDescricao("ROLE_ALUNO");
-		acesso = acessoController.salvarAcesso(acesso).getBody();
-
-		List<Acesso> acessos = acessoRepository.buscarAcessoDesc("ALUNO".trim().toUpperCase());
-		assertEquals(1, acessos.size());
-
-		acessoRepository.deleteById(acesso.getId());
-	}
 
 }

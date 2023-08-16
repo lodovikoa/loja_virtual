@@ -6,6 +6,7 @@ import br.com.lodoviko.loja_virtual_mentoria.service.AcessoService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,11 @@ public class AcessoController {
 
     @PostMapping
     public ResponseEntity<Acesso> salvarAcesso(@RequestBody Acesso acesso) throws ExceptionMentoriaJava {
+
+
+        String encryptPassowrd = new BCryptPasswordEncoder().encode("12345678");
+        System.out.println(encryptPassowrd);
+
         Acesso acessoSalvo = acessoService.save(acesso);
         return new ResponseEntity<Acesso>(acessoSalvo, HttpStatus.OK);
     }
@@ -40,6 +46,7 @@ public class AcessoController {
 
     @GetMapping(value = "/descricao/{desc}")
     public ResponseEntity<List<Acesso>> consultarAcessoPorDesc(@PathVariable("desc") String desc) {
+
         List<Acesso> acessos = acessoService.buscarPorDesc(desc);
         return new ResponseEntity<List<Acesso>>(acessos, HttpStatus.OK);
     }
