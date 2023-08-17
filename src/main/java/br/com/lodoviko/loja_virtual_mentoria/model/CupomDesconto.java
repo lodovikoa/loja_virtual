@@ -34,4 +34,8 @@ public class CupomDesconto implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dataValidadeCupom;
+
+    @ManyToOne(targetEntity = Pessoa.class)
+    @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+    private Pessoa empresa;
 }

@@ -1,0 +1,11 @@
+-- ADICIONAIS
+
+select constraint_name from information_schema.key_column_usage
+	where table_name = 'tb_usuario_acesso'
+		and column_name = 'acesso_id'
+        and constraint_name = 'UK_51533qf8075g59l675rjfuf3s';
+
+alter table tb_usuario_acesso drop CONSTRAINT `acesso_fk`;
+alter table tb_usuario_acesso drop index UK_51533qf8075g59l675rjfuf3s;
+
+ALTER TABLE tb_usuario_acesso ADD CONSTRAINT acesso_fk FOREIGN KEY ( acesso_id ) REFERENCES tb_acesso ( id ) ;

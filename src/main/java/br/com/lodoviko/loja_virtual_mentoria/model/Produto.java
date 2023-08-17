@@ -61,4 +61,8 @@ public class Produto implements Serializable {
     private String linkYoutube;
     private Boolean alertaQtdEstoque = Boolean.FALSE;
     private Integer qtdClique = 0;
+
+    @ManyToOne(targetEntity = Pessoa.class)
+    @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
+    private Pessoa empresa;
 }

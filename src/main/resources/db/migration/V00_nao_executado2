@@ -1,0 +1,275 @@
+
+-- Adicionado a FUNCTION
+
+DELIMITER //
+create function validaChavePessoa(sqPessoa bigint)
+	returns int
+    DETERMINISTIC
+    begin
+		declare existe int;
+        select count(1) into existe from tb_pessoa_fisica where id = sqPessoa;
+        if(existe <= 0) then
+			select count(1) into existe from tb_pessoa_juridica where id = sqPessoa;
+       end if;
+
+        return existe;
+    end //
+DELIMITER ;
+
+-----------------------------------------------------------------------------------
+
+-- drop function validaChavePessoa;
+
+DELIMITER //
+create function validaChavePessoa(sqPessoa bigint)
+	returns int
+    DETERMINISTIC
+    begin
+		declare existe int;
+        select count(1) into existe from tb_pessoa_fisica where id = sqPessoa;
+        if(existe <= 0) then
+			select count(1) into existe from tb_pessoa_juridica where id = sqPessoa;
+       end if;
+
+        return existe;
+    end //
+DELIMITER ;
+
+----------------------------------------------------------------------------------
+
+-- drop trigger tb_avaliacao_produto_validaPessoaInsert;
+-- drop trigger tb_avaliacao_produto_validaPessoaUpdate;
+-- drop trigger tb_conta_pagar_validaPessoaInsert;
+-- drop trigger tb_conta_pagar_validaPessoaUpdate
+-- drop trigger tb_conta_pagar_validaPessoaFornInsert;
+-- drop trigger tb_conta_pagar_validaPessoaFornUpdate;
+-- drop trigger tb_conta_receber_validaPessoaInsert;
+-- drop trigger tb_conta_receber_validaPessoaUpdate;
+-- drop trigger tb_endereco_validaPessoaInsert;
+-- drop trigger tb_endereco_validaPessoaUpdate;
+-- drop trigger tb_nota_fiscal_compra_validaPessoaInsert;
+-- drop trigger tb_nota_fiscal_compra_validaPessoaUpdate;
+-- drop trigger tb_usuario_validaPessoaInsert;
+-- drop trigger tb_usuario_validaPessoaUpdate;
+
+DELIMITER //
+CREATE TRIGGER tb_avaliacao_produto_validaPessoaInsert
+BEFORE INSERT ON tb_avaliacao_produto
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL; -- Força dar erro
+	end if;
+
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tb_avaliacao_produto_validaPessoaUpdate
+BEFORE UPDATE ON tb_avaliacao_produto
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+------------------------------------------------------------------------
+
+DELIMITER //
+CREATE TRIGGER tb_conta_pagar_validaPessoaInsert
+BEFORE INSERT ON tb_conta_pagar
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tb_conta_pagar_validaPessoaUpdate
+BEFORE UPDATE ON tb_conta_pagar
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+------------------------------------------------------------------------
+
+DELIMITER //
+CREATE TRIGGER tb_conta_pagar_validaPessoaFornInsert
+BEFORE INSERT ON tb_conta_pagar
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_forn_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_forn_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tb_conta_pagar_validaPessoaFornUpdate
+BEFORE UPDATE ON tb_conta_pagar
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_forn_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_forn_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+------------------------------------------------------------------------
+
+DELIMITER //
+CREATE TRIGGER tb_conta_receber_validaPessoaInsert
+BEFORE INSERT ON tb_conta_receber
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tb_conta_receber_validaPessoaUpdate
+BEFORE UPDATE ON tb_conta_receber
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+------------------------------------------------------------------------
+
+DELIMITER //
+CREATE TRIGGER tb_endereco_validaPessoaInsert
+BEFORE INSERT ON tb_endereco
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tb_endereco_validaPessoaUpdate
+BEFORE UPDATE ON tb_endereco
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+-------------------------------------------------------------------------
+
+DELIMITER //
+CREATE TRIGGER tb_nota_fiscal_compra_validaPessoaInsert
+BEFORE INSERT ON tb_nota_fiscal_compra
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tb_nota_fiscal_compra_validaPessoaUpdate
+BEFORE UPDATE ON tb_nota_fiscal_compra
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+-----------------------------------------------------------------------------
+
+DELIMITER //
+CREATE TRIGGER tb_usuario_validaPessoaInsert
+BEFORE INSERT ON tb_usuario
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER tb_usuario_validaPessoaUpdate
+BEFORE UPDATE ON tb_usuario
+FOR EACH ROW
+begin
+	set @valor = 0;
+	select validaChavePessoa(NEW.pessoa_id) into @valor;
+
+    if(@valor <= 0) then
+		SET NEW.pessoa_id = NULL;
+	end if;
+
+end //
+DELIMITER ;
