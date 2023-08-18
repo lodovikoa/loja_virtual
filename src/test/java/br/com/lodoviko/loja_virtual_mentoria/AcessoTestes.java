@@ -2,9 +2,7 @@ package br.com.lodoviko.loja_virtual_mentoria;
 
 import br.com.lodoviko.loja_virtual_mentoria.controller.AcessoController;
 import br.com.lodoviko.loja_virtual_mentoria.model.Acesso;
-import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
 import br.com.lodoviko.loja_virtual_mentoria.repository.AcessoRepository;
-import br.com.lodoviko.loja_virtual_mentoria.repository.PessoaRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import junit.framework.TestCase;
@@ -34,9 +32,6 @@ class AcessoTestes extends TestCase {
 
     @Autowired
     private WebApplicationContext wac;
-
-    @Autowired
-    private PessoaRepository pessoaRepository;
 
     /* Teste do end-point salvar 'Post' */
     @Test
@@ -137,30 +132,5 @@ class AcessoTestes extends TestCase {
 
         acessoRepository.deleteById(acesso.getId());
     }
-
-
-    @Test
-    public void CadPessoaTeste() throws Exception{
-        PessoaJuridica pessoaJuridica = new PessoaJuridica();
-
-        pessoaJuridica.setCnpj("111111111111111111");
-        pessoaJuridica.setNome("Alex Fernandes");
-        pessoaJuridica.setEmail("alex@gmail.com");
-        pessoaJuridica.setTelefone("9999999999");
-        pessoaJuridica.setInscEstadual("111111111111111");
-        pessoaJuridica.setInscMunicipal("22222222222222");
-        pessoaJuridica.setNomeFantasia("Nome fantasia");
-        pessoaJuridica.setRazaoSocial("Empresa Teste Principal");
-
-        pessoaRepository.save(pessoaJuridica);
-
-//        PessoaFisica pessoaFisica =  new PessoaFisica();
-
-
-    }
-
-
-    /* --------------------------------------------------------------------------------- */
-
 
 }
