@@ -1,0 +1,1 @@
+ALTER TABLE tb_pessoa_juridica CHANGE COLUMN empresa_id empresa_id BIGINT NULL;

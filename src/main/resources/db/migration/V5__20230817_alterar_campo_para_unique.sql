@@ -1,0 +1,1 @@
+ALTER TABLE tb_usuario ADD UNIQUE (login);
