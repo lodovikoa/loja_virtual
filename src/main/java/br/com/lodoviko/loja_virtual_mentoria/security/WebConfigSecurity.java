@@ -33,8 +33,11 @@ public class WebConfigSecurity {
                          /* Permissões para Registros de Acesso */
                         .requestMatchers(HttpMethod.POST, "/acesso").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/acesso/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/acesso/descricao/*").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/acesso/descricao/*").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "/acesso/*").hasRole("ADMIN")
+
+                        /* Permissões para Registros de Pessoa */
+                        .requestMatchers(HttpMethod.POST, "/pessoa/pj").hasRole("USER")
 
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()

@@ -34,6 +34,12 @@ public class PessoaService {
             throw new ExceptionMentoriaJava("CNPJ: (" + pessoaJuridica.getCnpj() + ") Já está cadastrado.");
         }
 
+        for (int i = 0; i < pessoaJuridica.getEnderecos().size(); i++) {
+            pessoaJuridica.getEnderecos().get(i).setPessoa(pessoaJuridica);
+            pessoaJuridica.getEnderecos().get(i).setEmpresa(pessoaJuridica);
+        }
+
+
         pessoaJuridica =  pessoaJuridicaRepository.save(pessoaJuridica);
 
         pessoaUserService.cadastrarUsuario(pessoaJuridica);

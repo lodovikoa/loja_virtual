@@ -1,6 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
 import br.com.lodoviko.loja_virtual_mentoria.enuns.TipoEndereco;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCompletoDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
@@ -54,4 +56,17 @@ public class Endereco implements Serializable {
     @ManyToOne(targetEntity = Pessoa.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private Pessoa empresa;
+
+    public EnderecoCompletoDTO converterEnderecoCompletoDTO(Endereco endereco) {
+        return new EnderecoCompletoDTO(endereco.getId(),
+                endereco.getRuaLogra(),
+                endereco.getCep(),
+                endereco.getNumero(),
+                endereco.getComplemento(),
+                endereco.getBairro(),
+                endereco.getUf(),
+                endereco.getCidade(),
+                endereco.getTipoEndereco()
+                );
+    }
 }
