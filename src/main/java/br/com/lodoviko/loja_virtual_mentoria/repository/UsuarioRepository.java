@@ -16,6 +16,6 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     Usuario findUserByPessoa(Long id, String login);
 
     @Modifying
-    @Query(nativeQuery = true, value = "insert into tb_usuario_acesso(usuario_id, acesso_id) values(?1, (select id from tb_acesso where descricao = 'ROLE_USER'))")
-    void insereAcessoUserPJ(Long usuarioId);
+    @Query(nativeQuery = true, value = "insert into tb_usuario_acesso(usuario_id, acesso_id) values(?1, (select id from tb_acesso where descricao = ?2))")
+    void insereAcessoUserPJ(Long usuarioId, String acesso);
 }
