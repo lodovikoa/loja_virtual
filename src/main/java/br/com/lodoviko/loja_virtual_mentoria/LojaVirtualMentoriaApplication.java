@@ -8,13 +8,15 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.concurrent.Executor;
 
 @SpringBootApplication
-@EnableAsync
+@EnableAsync  // Processos Assincrono, Anotar o método com "@Async" - por exemplo: Envio de e-mails
+@EnableScheduling // Processos que rodam automaticamente, anotar o método com "@Scheduled"
 @EntityScan(basePackages = "br.com.lodoviko.loja_virtual_mentoria.model")
 @ComponentScan(basePackages = {"br.*"})
 @EnableJpaRepositories(basePackages = {"br.com.lodoviko.loja_virtual_mentoria.repository"})

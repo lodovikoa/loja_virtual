@@ -34,6 +34,10 @@ public class PessoaService {
             throw new ExceptionMentoriaJava("CNPJ: (" + pessoaJuridica.getCnpj() + ") Já está cadastrado.");
         }
 
+        if(!pessoaJuridicaRepository.findByInscEstadual(pessoaJuridica.getInscEstadual()).isEmpty()){
+            throw new ExceptionMentoriaJava("Insc Estadual (" + pessoaJuridica.getInscEstadual() + ") Já está cadastrada.");
+        }
+
         for (int i = 0; i < pessoaJuridica.getEnderecos().size(); i++) {
             pessoaJuridica.getEnderecos().get(i).setPessoa(pessoaJuridica);
             pessoaJuridica.getEnderecos().get(i).setEmpresa(pessoaJuridica);

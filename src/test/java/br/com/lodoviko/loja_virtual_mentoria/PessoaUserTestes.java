@@ -29,7 +29,7 @@ class PessoaUserTestes extends TestCase {
         pessoaJuridica.setNome("Alex Fernandes");
         pessoaJuridica.setEmail("alexTESTE001@gmail.com");
         pessoaJuridica.setTelefone("9999999999");
-        pessoaJuridica.setInscEstadual("111111111111111");
+        pessoaJuridica.setInscEstadual("" + Calendar.getInstance().getTimeInMillis());
         pessoaJuridica.setInscMunicipal("22222222222222");
         pessoaJuridica.setNomeFantasia("Nome fantasia");
         pessoaJuridica.setRazaoSocial("Empresa Teste Principal");
