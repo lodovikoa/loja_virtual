@@ -4,8 +4,8 @@ import br.com.lodoviko.loja_virtual_mentoria.controller.PessoaController;
 import br.com.lodoviko.loja_virtual_mentoria.enuns.TipoEndereco;
 import br.com.lodoviko.loja_virtual_mentoria.model.Endereco;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCompletoDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCompletaDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCadastrarDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCadastrarDTO;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,11 +61,11 @@ class PessoaUserTestes extends TestCase {
         pessoaJuridica.getEnderecos().add(endereco1);
         pessoaJuridica.getEnderecos().add(endereco2);
 
-        PessoaJuridicaCompletaDTO dto = pessoaController.salvarPJ(pessoaJuridica).getBody();
+        PessoaJuridicaCadastrarDTO dto = pessoaController.salvarPJ(pessoaJuridica).getBody();
 
         assertEquals(true, dto.id() > 0);
 
-        for(EnderecoCompletoDTO endereco : dto.enderecos()) {
+        for(EnderecoCadastrarDTO endereco : dto.enderecos()) {
             assertEquals(true, endereco.id() > 0);
         }
 

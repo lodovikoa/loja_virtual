@@ -43,7 +43,6 @@ public class PessoaService {
             pessoaJuridica.getEnderecos().get(i).setEmpresa(pessoaJuridica);
         }
 
-
         pessoaJuridica =  pessoaJuridicaRepository.save(pessoaJuridica);
 
         pessoaUserService.cadastrarUsuario(pessoaJuridica);

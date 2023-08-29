@@ -3,8 +3,8 @@ package br.com.lodoviko.loja_virtual_mentoria.controller;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.Endereco;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCompletoDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCompletaDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCadastrarDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCadastrarDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.PessoaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +27,17 @@ public class PessoaController {
 
     @Transactional
     @PostMapping(value = "/pj")
-    public ResponseEntity<PessoaJuridicaCompletaDTO> salvarPJ(@RequestBody @Valid PessoaJuridica pessoaJuridica) throws ExceptionMentoriaJava {
+    public ResponseEntity<PessoaJuridicaCadastrarDTO> salvarPJ(@RequestBody @Valid PessoaJuridica pessoaJuridica) throws ExceptionMentoriaJava {
 
-        pessoaJuridica = pessoaService.salvarPJ(pessoaJuridica);
+        var pj = pessoaService.salvarPJ(pessoaJuridica);
 
-        List<EnderecoCompletoDTO> enderecoCompletoDTOs = new ArrayList<>();
-        for(Endereco endereco: pessoaJuridica.getEnderecos()) {
-            enderecoCompletoDTOs.add(endereco.converterEnderecoCompletoDTO(endereco));
+        List<EnderecoCadastrarDTO> enderecoCadastroDTOs = new ArrayList<>();
+        for(Endereco endereco: pj.getEnderecos()) {
+            enderecoCadastroDTOs.add(endereco.converterEnderecoCadastroDTO(endereco));
         }
 
-        PessoaJuridicaCompletaDTO pessoaJuridicaCompletaDTO = pessoaJuridica.converterPessoaJuridicaCompletoDTO(pessoaJuridica, enderecoCompletoDTOs);
+        PessoaJuridicaCadastrarDTO pessoaJuridicaCadastrarDTO = pj.converterPessoaJuridicaCadastrarDTO(pj, enderecoCadastroDTOs);
 
-       return ResponseEntity.ok(pessoaJuridicaCompletaDTO);
+       return ResponseEntity.ok(pessoaJuridicaCadastrarDTO);
     }
 }

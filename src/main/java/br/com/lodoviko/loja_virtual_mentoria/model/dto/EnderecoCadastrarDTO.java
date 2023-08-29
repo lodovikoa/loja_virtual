@@ -2,7 +2,7 @@ package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
 import br.com.lodoviko.loja_virtual_mentoria.enuns.TipoEndereco;
 
-public record EnderecoCompletoDTO(
+public record EnderecoCadastrarDTO(
         Long id,
         String ruaLogra,
         String cep,

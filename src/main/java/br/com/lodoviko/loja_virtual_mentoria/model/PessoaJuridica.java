@@ -1,7 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCompletoDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCompletaDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCadastrarDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCadastrarDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,9 +35,9 @@ public class PessoaJuridica extends Pessoa {
 
     private String categoria;
 
-    public PessoaJuridicaCompletaDTO converterPessoaJuridicaCompletoDTO(PessoaJuridica pessoaJuridica, List<EnderecoCompletoDTO> enderecoCompletoDTOs) {
+    public PessoaJuridicaCadastrarDTO converterPessoaJuridicaCadastrarDTO(PessoaJuridica pessoaJuridica, List<EnderecoCadastrarDTO> enderecoCompletoDTOs) {
 
-        return new PessoaJuridicaCompletaDTO(pessoaJuridica.getId(),
+        return new PessoaJuridicaCadastrarDTO(pessoaJuridica.getId(),
                 pessoaJuridica.getNome(),
                 pessoaJuridica.getEmail(),
                 pessoaJuridica.getTelefone(),
