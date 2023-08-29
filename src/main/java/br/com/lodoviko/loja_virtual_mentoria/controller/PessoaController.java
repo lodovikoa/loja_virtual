@@ -6,6 +6,7 @@ import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCompletoDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCompletaDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.PessoaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class PessoaController {
 
     @Transactional
     @PostMapping(value = "/pj")
-    public ResponseEntity<PessoaJuridicaCompletaDTO> salvarPJ(@RequestBody PessoaJuridica pessoaJuridica) throws ExceptionMentoriaJava {
+    public ResponseEntity<PessoaJuridicaCompletaDTO> salvarPJ(@RequestBody @Valid PessoaJuridica pessoaJuridica) throws ExceptionMentoriaJava {
 
         pessoaJuridica = pessoaService.salvarPJ(pessoaJuridica);
 

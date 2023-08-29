@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class PessoaJuridica extends Pessoa {
     @Setter(AccessLevel.NONE)
     private static final long serialVersionUID = 1L;
 
+    @CNPJ(message = "CNPJ inválido")
     @Column(nullable = false)
     private String cnpj;
 

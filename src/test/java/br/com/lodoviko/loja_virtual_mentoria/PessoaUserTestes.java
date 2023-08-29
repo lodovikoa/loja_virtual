@@ -25,7 +25,7 @@ class PessoaUserTestes extends TestCase {
     public void CadPessoaTeste() throws Exception{
         PessoaJuridica pessoaJuridica = new PessoaJuridica();
 
-        pessoaJuridica.setCnpj("" + Calendar.getInstance().getTimeInMillis());
+        pessoaJuridica.setCnpj("25667890000000"); // + Calendar.getInstance().getTimeInMillis());
         pessoaJuridica.setNome("Alex Fernandes");
         pessoaJuridica.setEmail("alexTESTE001@gmail.com");
         pessoaJuridica.setTelefone("9999999999");
