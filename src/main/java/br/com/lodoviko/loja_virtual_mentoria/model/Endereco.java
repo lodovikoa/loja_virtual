@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -66,7 +68,34 @@ public class Endereco implements Serializable {
                 endereco.getBairro(),
                 endereco.getUf(),
                 endereco.getCidade(),
-                endereco.getTipoEndereco()
+                endereco.getTipoEndereco(),
+                endereco.getPessoa(),
+                endereco.getEmpresa()
                 );
+    }
+
+    public List<Endereco> converterCadastrarEnderecoDTOEndereco(List<EnderecoCadastrarDTO> enderecoCadastrarDTOS) {
+
+        List<Endereco> enderecos = new ArrayList<>();
+
+        for (EnderecoCadastrarDTO dto : enderecoCadastrarDTOS) {
+
+            Endereco endereco = new Endereco();
+
+            endereco.setRuaLogra(dto.ruaLogra());
+            endereco.setCep(dto.cep());
+            endereco.setNumero(dto.numero());
+            endereco.setComplemento(dto.complemento());
+            endereco.setBairro(dto.bairro());
+            endereco.setUf(dto.uf());
+            endereco.setCidade(dto.cidade());
+            endereco.setTipoEndereco(dto.tipoEndereco());
+            endereco.setPessoa(dto.pessoa());
+            endereco.setEmpresa(dto.empresa());
+
+            enderecos.add(endereco);
+        }
+
+        return enderecos;
     }
 }

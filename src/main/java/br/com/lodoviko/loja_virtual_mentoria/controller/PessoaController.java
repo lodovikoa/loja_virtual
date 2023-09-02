@@ -4,6 +4,8 @@ import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.Endereco;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoCadastrarDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaFisicaCadastroDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaFisicaExibirDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCadastrarDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.PessoaService;
 import jakarta.validation.Valid;
@@ -39,5 +41,17 @@ public class PessoaController {
         PessoaJuridicaCadastrarDTO pessoaJuridicaCadastrarDTO = pj.converterPessoaJuridicaCadastrarDTO(pj, enderecoCadastroDTOs);
 
        return ResponseEntity.ok(pessoaJuridicaCadastrarDTO);
+    }
+
+    @Transactional
+    @PostMapping(value = "/pf")
+    public ResponseEntity<PessoaFisicaExibirDTO> salvarPF(@RequestBody @Valid PessoaFisicaCadastroDTO pessoaFisicaCadastroDTO) throws ExceptionMentoriaJava {
+
+//        PessoaJuridica pj = new PessoaJuridica();
+//        pj = pessoaService.findReferenceById(pessoaFisicaCadastroDTO.idEmpresa());
+
+        var pf = pessoaService.salvarPF(pessoaFisicaCadastroDTO);
+
+        return ResponseEntity.ok(pf);
     }
 }

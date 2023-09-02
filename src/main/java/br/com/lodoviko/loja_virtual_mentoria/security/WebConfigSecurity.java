@@ -38,6 +38,7 @@ public class WebConfigSecurity {
 
                         /* Permissões para Registros de Pessoa */
                         .requestMatchers(HttpMethod.POST, "/pessoa/pj").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/pessoa/pf").hasRole("USER")
 
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()
