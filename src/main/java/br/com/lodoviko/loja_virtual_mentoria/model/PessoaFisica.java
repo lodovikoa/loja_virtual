@@ -1,7 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.EnderecoExibirDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaFisicaCadastroDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaFisicaCadastrarDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaFisicaExibirDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,19 +28,14 @@ public class PessoaFisica extends Pessoa{
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
 
-    public PessoaFisica converterCadastrarDTOPessoaFisica(PessoaFisicaCadastroDTO pessoaFisicaCadastroDTO) {
-
-     //   Endereco endereco = new Endereco();
-
-        this.setId(pessoaFisicaCadastroDTO.id());
-        this.setNome(pessoaFisicaCadastroDTO.nome());
-        this.setEmail(pessoaFisicaCadastroDTO.email());
-        this.setTelefone(pessoaFisicaCadastroDTO.telefone());
-        this.setTipoPessoa(pessoaFisicaCadastroDTO.tipoPessoa());
-        this.setCpf(pessoaFisicaCadastroDTO.cpf());
-        this.setDataNascimento(pessoaFisicaCadastroDTO.dataNascimento());
-       // this.setEmpresa(pessoaFisicaCadastroDTO.empresa());
-       // this.setEnderecos(endereco.converterCadastrarEnderecoDTOEndereco(pessoaFisicaCadastroDTO.enderecos()));
+    public PessoaFisica converterCadastrarDTOPessoaFisica(PessoaFisicaCadastrarDTO pessoaFisicaCadastrarDTO) {
+        this.setId(pessoaFisicaCadastrarDTO.id());
+        this.setNome(pessoaFisicaCadastrarDTO.nome());
+        this.setEmail(pessoaFisicaCadastrarDTO.email());
+        this.setTelefone(pessoaFisicaCadastrarDTO.telefone());
+        this.setTipoPessoa(pessoaFisicaCadastrarDTO.tipoPessoa());
+        this.setCpf(pessoaFisicaCadastrarDTO.cpf());
+        this.setDataNascimento(pessoaFisicaCadastrarDTO.dataNascimento());
 
         return this;
     }

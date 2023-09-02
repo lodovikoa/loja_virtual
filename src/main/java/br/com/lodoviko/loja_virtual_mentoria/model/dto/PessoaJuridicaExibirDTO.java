@@ -2,7 +2,7 @@ package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
 import java.util.List;
 
-public record PessoaJuridicaCadastrarDTO(
+public record PessoaJuridicaExibirDTO(
         Long id,
         String nome,
         String email,
@@ -14,7 +14,6 @@ public record PessoaJuridicaCadastrarDTO(
         String nomeFansasia,
         String razaoSocial,
         String categoria,
-        Long idEmpresa,
-        List<EnderecoCadastrarDTO> enderecos
+        List<EnderecoExibirDTO> enderecos
 ) {
 }

@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.br.CPF;
 import java.util.Date;
 import java.util.List;
 
-public record PessoaFisicaCadastroDTO(
+public record PessoaFisicaCadastrarDTO(
         Long id,
         String nome,
         String email,
