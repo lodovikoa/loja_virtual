@@ -58,6 +58,20 @@ public class PessoaService {
 
         List<Endereco> enderecos = endereco.converterCadastrarEnderecoDTOEndereco(pessoaJuridicaCadastrarDTO.enderecos());
 
+        /* Esse código é só pra teste da API do CEP. Não será usada após o desenvolvimento do front-end  */
+        if(pessoaJuridica.getId() == null || pessoaJuridica.getId() <= 0 ) {
+            for (int i = 0; i < enderecos.size(); i++) {
+                if(enderecos.get(i).getCep() != null && enderecos.get(i).getCep().length() == 8) {
+                    CepDTO cepDTO = this.consultaCep(enderecos.get(i).getCep());
+                    enderecos.get(i).setRuaLogra(cepDTO.logradouro());
+                    enderecos.get(i).setComplemento(cepDTO.complemento());
+                    enderecos.get(i).setBairro(cepDTO.bairro());
+                    enderecos.get(i).setCidade(cepDTO.localidade());
+                    enderecos.get(i).setUf(cepDTO.uf());
+                }
+            }
+        }
+
         for (Endereco end : enderecos) {
             end.setPessoa(pessoaJuridica);
             end.setEmpresa(empresa);
