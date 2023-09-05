@@ -4,14 +4,12 @@ import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.Endereco;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaFisica;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaFisicaCadastrarDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaFisicaExibirDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaCadastrarDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.PessoaJuridicaExibirDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.*;
 import br.com.lodoviko.loja_virtual_mentoria.repository.PessoaFisicaRepository;
 import br.com.lodoviko.loja_virtual_mentoria.repository.PessoaJuridicaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -108,6 +106,10 @@ public class PessoaService {
         pessoaUserService.cadastrarUsuario(pessoaFisica);
 
         return  pessoaFisica.converterPessoaFisicaExibirDTO();
+    }
+
+    public CepDTO consultaCep(String cep) {
+        return new RestTemplate().getForEntity("https://viacep.com.br/ws/" + cep + "/json/", CepDTO.class).getBody();
     }
 
 }

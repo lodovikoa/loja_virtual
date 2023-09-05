@@ -40,6 +40,9 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.POST, "/pessoa/pj").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/pessoa/pf").hasRole("USER")
 
+                        /* Permissão para consultar CEPs */
+                        .requestMatchers(HttpMethod.GET, "/pessoa/consultarCep/*").hasRole("USER")
+
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()
                 )
