@@ -10,4 +10,6 @@ import java.util.List;
 public interface PessoaFisicaRepository extends JpaRepository<PessoaFisica, Long> {
 
     List<PessoaFisica> findByCpf(String cpf);
+
+    List<PessoaFisica> findByNomeContaining(String nome);
 }

@@ -25,7 +25,7 @@ public record PessoaJuridicaCadastrarDTO(
         String cnpj,
         String inscEstadual,
         String inscMunicipal,
-        String nomeFansasia,
+        String nomeFantasia,
         String razaoSocial,
         String categoria,
         Long idEmpresa,

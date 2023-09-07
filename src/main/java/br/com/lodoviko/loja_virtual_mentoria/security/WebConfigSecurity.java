@@ -38,7 +38,10 @@ public class WebConfigSecurity {
 
                         /* Permissões para Registros de Pessoa */
                         .requestMatchers(HttpMethod.POST, "/pessoa/pj").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/pessoa/pj/**").hasRole("USER")
+
                         .requestMatchers(HttpMethod.POST, "/pessoa/pf").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "pessoa/pf/**").hasRole("USER")
 
                         /* Permissão para consultar CEPs */
                         .requestMatchers(HttpMethod.GET, "/pessoa/consultarCep/*").hasRole("USER")

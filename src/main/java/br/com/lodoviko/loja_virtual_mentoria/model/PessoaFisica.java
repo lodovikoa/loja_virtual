@@ -68,4 +68,15 @@ public class PessoaFisica extends Pessoa{
                 enderecoExibirDTOS
                 );
     }
+
+    public List<PessoaFisicaExibirDTO> converterPessoaFisicaConsultarDTO(List<PessoaFisica> pessoaFisicas) {
+        List<PessoaFisicaExibirDTO> pessoaFisicaExibirDTOS = new ArrayList<>();
+
+        for (PessoaFisica pf : pessoaFisicas) {
+            PessoaFisicaExibirDTO pfDTO = pf.converterPessoaFisicaExibirDTO();
+            pessoaFisicaExibirDTOS.add(pfDTO);
+        }
+
+        return pessoaFisicaExibirDTOS;
+    }
 }

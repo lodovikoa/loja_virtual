@@ -47,14 +47,14 @@ public class PessoaJuridica extends Pessoa {
         this.setCnpj(pessoaJuridicaCadastrarDTO.cnpj());
         this.setInscEstadual(pessoaJuridicaCadastrarDTO.inscEstadual());
         this.setInscMunicipal(pessoaJuridicaCadastrarDTO.inscMunicipal());
-        this.setNomeFantasia(pessoaJuridicaCadastrarDTO.nomeFansasia());
+        this.setNomeFantasia(pessoaJuridicaCadastrarDTO.nomeFantasia());
         this.setRazaoSocial(pessoaJuridicaCadastrarDTO.razaoSocial());
         this.setCategoria(pessoaJuridicaCadastrarDTO.categoria());
 
         return this;
     }
 
-    public PessoaJuridicaExibirDTO converterPessoaJuridicaCadastrarDTO() {
+    public PessoaJuridicaExibirDTO converterPessoaJuridicaConsultarDTO() {
 
         List<EnderecoExibirDTO> enderecoExibirDTOS = new ArrayList<>();
 
@@ -86,5 +86,17 @@ public class PessoaJuridica extends Pessoa {
                 this.getCategoria(),
                 enderecoExibirDTOS
         );
+    }
+
+    public List<PessoaJuridicaExibirDTO> converterPessoaJuridicaConsultarDTO(List<PessoaJuridica> pessoaJuridicas) {
+
+        List<PessoaJuridicaExibirDTO> pessoaJuridicaExibirDTOS = new ArrayList<>();
+
+        for (PessoaJuridica pj : pessoaJuridicas) {
+            PessoaJuridicaExibirDTO pjDTO = pj.converterPessoaJuridicaConsultarDTO();
+            pessoaJuridicaExibirDTOS.add(pjDTO);
+        }
+
+        return pessoaJuridicaExibirDTOS;
     }
 }

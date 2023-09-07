@@ -25,6 +25,7 @@ public class PessoaService {
     @Autowired
     PessoaUserService pessoaUserService;
 
+    /*------- PESSOA JURIDICA -------*/
     // Salvar Pessoa Juridica
     public PessoaJuridicaExibirDTO salvarPJ(PessoaJuridicaCadastrarDTO pessoaJuridicaCadastrarDTO) throws ExceptionMentoriaJava {
 
@@ -50,7 +51,7 @@ public class PessoaService {
 
         // Se informado o código da Empresa, busca-lo no banco
         if(pessoaJuridicaCadastrarDTO.idEmpresa() != null && pessoaJuridicaCadastrarDTO.idEmpresa() > 0) {
-            empresa = pessoaJuridicaRepository.findByPrimaryKey(pessoaJuridicaCadastrarDTO.idEmpresa());
+            empresa = pessoaJuridicaRepository.findById(pessoaJuridicaCadastrarDTO.idEmpresa()).get();
         }
 
         pessoaJuridica = pessoaJuridica.converterCadastrarDTOPessoaJuridica(pessoaJuridicaCadastrarDTO);
@@ -81,9 +82,21 @@ public class PessoaService {
         pessoaJuridica =  pessoaJuridicaRepository.save(pessoaJuridica);
         pessoaUserService.cadastrarUsuario(pessoaJuridica);
 
-        return pessoaJuridica.converterPessoaJuridicaCadastrarDTO();
+        return pessoaJuridica.converterPessoaJuridicaConsultarDTO();
     }
 
+    public List<PessoaJuridicaExibirDTO> findByCnpjPJ(String cnpj) {
+        List<PessoaJuridica> pjs = pessoaJuridicaRepository.findByCnpj(cnpj);
+        return new PessoaJuridica().converterPessoaJuridicaConsultarDTO(pjs);
+    }
+
+    public List<PessoaJuridicaExibirDTO> findByRazaoSocialPJ(String dsRazaoSocial) {
+        List<PessoaJuridica> pjs = pessoaJuridicaRepository.findByRazaoSocialContaining(dsRazaoSocial);
+        return new PessoaJuridica().converterPessoaJuridicaConsultarDTO(pjs);
+    }
+
+
+    /*------- PESSOA FISICA -------*/
     public PessoaFisicaExibirDTO salvarPF(PessoaFisicaCadastrarDTO pessoaFisicaCadastrarDTO) throws ExceptionMentoriaJava {
 
         // Validações
@@ -100,7 +113,7 @@ public class PessoaService {
         PessoaFisica pessoaFisica = new PessoaFisica();
         Endereco endereco = new Endereco();
 
-        PessoaJuridica empresa = pessoaJuridicaRepository.findByPrimaryKey(pessoaFisicaCadastrarDTO.idEmpresa());
+        PessoaJuridica empresa = pessoaJuridicaRepository.findById(pessoaFisicaCadastrarDTO.idEmpresa()).get();
 
         pessoaFisica = pessoaFisica.converterCadastrarDTOPessoaFisica(pessoaFisicaCadastrarDTO);
         pessoaFisica.setEmpresa(empresa);
@@ -122,6 +135,17 @@ public class PessoaService {
         return  pessoaFisica.converterPessoaFisicaExibirDTO();
     }
 
+    public List<PessoaFisicaExibirDTO> findByCpfPF(String dsCpf) {
+        List<PessoaFisica> pfs = pessoaFisicaRepository.findByCpf(dsCpf);
+        return new PessoaFisica().converterPessoaFisicaConsultarDTO(pfs);
+    }
+
+    public List<PessoaFisicaExibirDTO> findByNomePF(String dsNome) {
+        List<PessoaFisica> pfs = pessoaFisicaRepository.findByNomeContaining(dsNome);
+        return new PessoaFisica().converterPessoaFisicaConsultarDTO(pfs);
+    }
+
+    /*------- OUTROS -------*/
     public CepDTO consultaCep(String cep) {
         return new RestTemplate().getForEntity("https://viacep.com.br/ws/" + cep + "/json/", CepDTO.class).getBody();
     }

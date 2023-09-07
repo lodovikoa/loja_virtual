@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("pessoa")
 public class PessoaController {
@@ -31,6 +33,18 @@ public class PessoaController {
        return ResponseEntity.ok(pj);
     }
 
+    @GetMapping(value = "/pj/cnpj/{dsCnpj}")
+    public ResponseEntity<List<PessoaJuridicaExibirDTO>> findByCnpjPJ(@PathVariable("dsCnpj") String dsCnpj) {
+        List<PessoaJuridicaExibirDTO> pessoaJuridicaExibirDTOS = pessoaService.findByCnpjPJ(dsCnpj);
+        return ResponseEntity.ok(pessoaJuridicaExibirDTOS);
+    }
+
+    @GetMapping(value = "/pj/razaosocial/{dsRazaoSocial}")
+    public ResponseEntity<List<PessoaJuridicaExibirDTO>> findByRazaoSocialPJ(@PathVariable("dsRazaoSocial") String dsRazaoSocial) {
+        List<PessoaJuridicaExibirDTO> pessoaJuridicaExibirDTOS = pessoaService.findByRazaoSocialPJ(dsRazaoSocial);
+        return ResponseEntity.ok(pessoaJuridicaExibirDTOS);
+    }
+
     @Transactional
     @PostMapping(value = "/pf")
     public ResponseEntity<PessoaFisicaExibirDTO> salvarPF(@RequestBody @Valid PessoaFisicaCadastrarDTO pessoaFisicaCadastrarDTO) throws ExceptionMentoriaJava {
@@ -38,5 +52,17 @@ public class PessoaController {
         var pf = pessoaService.salvarPF(pessoaFisicaCadastrarDTO);
 
         return ResponseEntity.ok(pf);
+    }
+
+    @GetMapping(value = "/pf/cpf/{dsCpf}")
+    public ResponseEntity<List<PessoaFisicaExibirDTO>> findByCpfPF(@PathVariable("dsCpf") String dsCpf) {
+        List<PessoaFisicaExibirDTO> pessoaFisicaExibirDTOS = pessoaService.findByCpfPF(dsCpf);
+        return ResponseEntity.ok(pessoaFisicaExibirDTOS);
+    }
+
+    @GetMapping(value = "/pf/nome/{dsNome}")
+    public ResponseEntity<List<PessoaFisicaExibirDTO>> findByNomePF(@PathVariable("dsNome") String dsNome) {
+        List<PessoaFisicaExibirDTO> pessoaFisicaExibirDTOS = pessoaService.findByNomePF(dsNome);
+        return ResponseEntity.ok(pessoaFisicaExibirDTOS);
     }
 }

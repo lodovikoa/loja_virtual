@@ -1,7 +1,10 @@
 package br.com.lodoviko.loja_virtual_mentoria.exception;
 
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.ObjetoErroDTO;
+import br.com.lodoviko.loja_virtual_mentoria.service.EmailSendService;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -15,11 +18,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.List;
 
 @RestControllerAdvice
 public class ControleExcecoes extends ResponseEntityExceptionHandler {
+
+    @Autowired
+    EmailSendService emailSendService;
 
     @ExceptionHandler(ExceptionMentoriaJava.class)
     public ResponseEntity<Object> handleExceptionCustom(ExceptionMentoriaJava ex) {
@@ -51,6 +59,8 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
         /* Joga o erro para o console */
         ex.printStackTrace();
 
+        this.enviarEmailEquipeResponsavel(ex);
+
         return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -73,6 +83,20 @@ public class ControleExcecoes extends ResponseEntityExceptionHandler {
         /* Joga o erro para o console */
         ex.printStackTrace();
 
+        this.enviarEmailEquipeResponsavel(ex);
+
         return new ResponseEntity<Object>(objetoErroDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    private void enviarEmailEquipeResponsavel(Exception ex) {
+        try {
+            String dsEmail = "lodoviko@hotmail.com";
+            emailSendService.enviarEmailHtml("Erro na loja virtual", ExceptionUtils.getStackTrace(ex),dsEmail);
+            System.out.println("E-mail com trace de erro enviado para: " + dsEmail);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
