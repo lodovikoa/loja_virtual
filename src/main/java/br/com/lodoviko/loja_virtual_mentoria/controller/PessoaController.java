@@ -25,7 +25,12 @@ public class PessoaController {
 
     @GetMapping(value = "/consultarCep/{cep}")
     public ResponseEntity<CepDTO> consultarCep(@PathVariable("cep") String cep) {
-        return new ResponseEntity<CepDTO>(pessoaService.consultaCep(cep), HttpStatus.OK);
+        return new ResponseEntity<CepDTO>(pessoaService.CepConsultaWS(cep), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/consultarCnpj/{cnpj}")
+    public ResponseEntity<CnpjConsultaDTO> consultaCnpj(@PathVariable("cnpj") String cnpj) {
+        return new ResponseEntity<CnpjConsultaDTO>(pessoaService.CnpjConsultaReceitaWS(cnpj), HttpStatus.OK);
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package br.com.lodoviko.loja_virtual_mentoria.service;
 
+import br.com.lodoviko.loja_virtual_mentoria.enuns.TipoPessoa;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.Endereco;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaFisica;
@@ -33,6 +34,10 @@ public class PessoaService {
             throw new ExceptionMentoriaJava("Pessoa Juridica não pode ser nullo");
         }
 
+        if(pessoaJuridicaCadastrarDTO.tipoPessoa() == null) {
+            throw new ExceptionMentoriaJava("Informe o tipo Pessoa Juridica ou Fornecedor ");
+        }
+
         if(pessoaJuridicaCadastrarDTO.id() != null) {
             throw new ExceptionMentoriaJava("Não informar ID no cadastro de Pessoa Juridica");
         }
@@ -63,7 +68,7 @@ public class PessoaService {
         if(pessoaJuridica.getId() == null || pessoaJuridica.getId() <= 0 ) {
             for (int i = 0; i < enderecos.size(); i++) {
                 if(enderecos.get(i).getCep() != null && enderecos.get(i).getCep().length() == 8) {
-                    CepDTO cepDTO = this.consultaCep(enderecos.get(i).getCep());
+                    CepDTO cepDTO = this.CepConsultaWS(enderecos.get(i).getCep());
                     enderecos.get(i).setRuaLogra(cepDTO.logradouro());
                     enderecos.get(i).setComplemento(cepDTO.complemento());
                     enderecos.get(i).setBairro(cepDTO.bairro());
@@ -106,6 +111,10 @@ public class PessoaService {
         if(pessoaFisicaCadastrarDTO.id() != null)
             throw new ExceptionMentoriaJava("Não informar Id no cadastro de Pessoa Física.");
 
+        if(pessoaFisicaCadastrarDTO.tipoPessoa() == null) {
+            pessoaFisicaCadastrarDTO.atribuirTipoPessoa(TipoPessoa.FISICA.name());
+        }
+
         if(!pessoaFisicaRepository.findByCpf(pessoaFisicaCadastrarDTO.cpf()).isEmpty()) {
             throw new ExceptionMentoriaJava("CPF (" + pessoaFisicaCadastrarDTO.cpf() + ") já está cadastrado.");
         }
@@ -146,8 +155,12 @@ public class PessoaService {
     }
 
     /*------- OUTROS -------*/
-    public CepDTO consultaCep(String cep) {
+    public CepDTO CepConsultaWS(String cep) {
         return new RestTemplate().getForEntity("https://viacep.com.br/ws/" + cep + "/json/", CepDTO.class).getBody();
+    }
+
+    public CnpjConsultaDTO CnpjConsultaReceitaWS(String cnpj) {
+        return new RestTemplate().getForEntity("https://receitaws.com.br/v1/cnpj/" + cnpj, CnpjConsultaDTO.class).getBody();
     }
 
 }

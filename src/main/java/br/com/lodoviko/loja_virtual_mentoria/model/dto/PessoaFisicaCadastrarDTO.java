@@ -28,4 +28,7 @@ public record PessoaFisicaCadastrarDTO(
         Long idEmpresa,
         List<EnderecoCadastrarDTO> enderecos
 ) {
+        public void atribuirTipoPessoa(String tipoPessoa) {
+                tipoPessoa = this.tipoPessoa;
+        }
 }
