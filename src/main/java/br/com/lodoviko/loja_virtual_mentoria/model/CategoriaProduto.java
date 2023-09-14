@@ -27,16 +27,7 @@ public class CategoriaProduto implements Serializable{
 
     @ManyToOne(targetEntity = Pessoa.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-    private Pessoa empresa;
-
-    public CategoriaProduto(Long id, String nomeDesc){
-        this.id = id;
-        this.nomeDesc = nomeDesc;
-    }
-
-    public CategoriaProduto converterDTOCategoriaProduto(CategoriaProdutoDTO categoriaProdutoDTO) {
-        return new CategoriaProduto(categoriaProdutoDTO.id(), categoriaProdutoDTO.nomeDesc());
-    }
+    private PessoaJuridica empresa;
 
     public CategoriaProdutoDTO converterCategoriaProdutoDTO() {
         return  new CategoriaProdutoDTO(this.getId(), this.getNomeDesc(), this.getEmpresa().getId());

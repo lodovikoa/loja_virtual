@@ -22,8 +22,9 @@ public class CatetoriaProdutoController {
 
     @Transactional
     @PostMapping
-    public ResponseEntity<CategoriaProdutoDTO> salvarCategoriaProduto(@RequestBody CategoriaProdutoDTO categoriaProdutoDTO) throws ExceptionMentoriaJava {
-        CategoriaProduto categoriaProdutoSalva = categoriaProdutoService.salvar(categoriaProdutoDTO);
-        return new ResponseEntity<CategoriaProdutoDTO>(categoriaProdutoSalva.converterCategoriaProdutoDTO(), HttpStatus.OK);
+    public ResponseEntity<CategoriaProdutoDTO> salvarCategoriaProduto(@RequestBody CategoriaProduto categoriaProduto) throws ExceptionMentoriaJava {
+        CategoriaProdutoDTO categoriaProdutoSalva = categoriaProdutoService.salvar(categoriaProduto);
+        return new ResponseEntity<CategoriaProdutoDTO>(categoriaProdutoSalva, HttpStatus.OK);
     }
+
 }
