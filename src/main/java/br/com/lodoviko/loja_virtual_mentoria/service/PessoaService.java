@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PessoaService {
@@ -51,16 +52,21 @@ public class PessoaService {
         }
 
         PessoaJuridica pessoaJuridica = new PessoaJuridica();
-        PessoaJuridica empresa = new PessoaJuridica();
+     //   PessoaJuridica empresa = new PessoaJuridica();
         Endereco endereco = new Endereco();
 
         // Se informado o código da Empresa, busca-lo no banco
-        if(pessoaJuridicaCadastrarDTO.idEmpresa() != null && pessoaJuridicaCadastrarDTO.idEmpresa() > 0) {
-            empresa = pessoaJuridicaRepository.findById(pessoaJuridicaCadastrarDTO.idEmpresa()).get();
+        if(pessoaJuridicaCadastrarDTO.idEmpresa() == null || pessoaJuridicaCadastrarDTO.idEmpresa() <= 0) {
+            throw new ExceptionMentoriaJava("Faltou informar a Empresa!");
+        }
+
+        Optional<PessoaJuridica> empresa = pessoaJuridicaRepository.findById(pessoaJuridicaCadastrarDTO.idEmpresa());
+        if(!empresa.isPresent()) {
+            throw new ExceptionMentoriaJava("Empresa informada não foi localizada!");
         }
 
         pessoaJuridica = pessoaJuridica.converterCadastrarDTOPessoaJuridica(pessoaJuridicaCadastrarDTO);
-        pessoaJuridica.setEmpresa(empresa);
+        pessoaJuridica.setEmpresa(empresa.get());
 
         List<Endereco> enderecos = endereco.converterCadastrarEnderecoDTOEndereco(pessoaJuridicaCadastrarDTO.enderecos());
 
@@ -80,7 +86,7 @@ public class PessoaService {
 
         for (Endereco end : enderecos) {
             end.setPessoa(pessoaJuridica);
-            end.setEmpresa(empresa);
+            end.setEmpresa(empresa.get());
             pessoaJuridica.getEnderecos().add(end);
         }
 
@@ -115,6 +121,10 @@ public class PessoaService {
             pessoaFisicaCadastrarDTO.atribuirTipoPessoa(TipoPessoa.FISICA.name());
         }
 
+        if(pessoaFisicaCadastrarDTO.idEmpresa() == null || pessoaFisicaCadastrarDTO.idEmpresa() <= 0) {
+            throw new ExceptionMentoriaJava("Faltou informar a Empresa!");
+        }
+
         if(!pessoaFisicaRepository.findByCpf(pessoaFisicaCadastrarDTO.cpf()).isEmpty()) {
             throw new ExceptionMentoriaJava("CPF (" + pessoaFisicaCadastrarDTO.cpf() + ") já está cadastrado.");
         }
@@ -122,10 +132,13 @@ public class PessoaService {
         PessoaFisica pessoaFisica = new PessoaFisica();
         Endereco endereco = new Endereco();
 
-        PessoaJuridica empresa = pessoaJuridicaRepository.findById(pessoaFisicaCadastrarDTO.idEmpresa()).get();
+        Optional<PessoaJuridica> empresa = pessoaJuridicaRepository.findById(pessoaFisicaCadastrarDTO.idEmpresa());
+        if(!empresa.isPresent()) {
+            throw new ExceptionMentoriaJava("Empresa informada não foi encontrada!");
+        }
 
         pessoaFisica = pessoaFisica.converterCadastrarDTOPessoaFisica(pessoaFisicaCadastrarDTO);
-        pessoaFisica.setEmpresa(empresa);
+        pessoaFisica.setEmpresa(empresa.get());
 
 
 
@@ -133,7 +146,7 @@ public class PessoaService {
 
         for (Endereco end : enderecos) {
             end.setPessoa(pessoaFisica);
-            end.setEmpresa(empresa);
+            end.setEmpresa(empresa.get());
             pessoaFisica.getEnderecos().add(end);
         }
 

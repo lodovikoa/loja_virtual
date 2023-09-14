@@ -1,12 +1,14 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.CategoriaProdutoDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
+
+@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "tb_categoria_produto")
 @EqualsAndHashCode(of = {"id"})
@@ -18,13 +20,25 @@ public class CategoriaProduto implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter @Setter private Long id;
+    private Long id;
 
     @Column(nullable = false)
-    @Getter @Setter private String nomeDesc;
+    private String nomeDesc;
 
     @ManyToOne(targetEntity = Pessoa.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private Pessoa empresa;
 
+    public CategoriaProduto(Long id, String nomeDesc){
+        this.id = id;
+        this.nomeDesc = nomeDesc;
+    }
+
+    public CategoriaProduto converterDTOCategoriaProduto(CategoriaProdutoDTO categoriaProdutoDTO) {
+        return new CategoriaProduto(categoriaProdutoDTO.id(), categoriaProdutoDTO.nomeDesc());
+    }
+
+    public CategoriaProdutoDTO converterCategoriaProdutoDTO() {
+        return  new CategoriaProdutoDTO(this.getId(), this.getNomeDesc(), this.getEmpresa().getId());
+    }
 }
