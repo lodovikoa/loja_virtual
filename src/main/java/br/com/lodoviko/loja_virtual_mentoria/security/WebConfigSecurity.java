@@ -45,6 +45,18 @@ public class WebConfigSecurity {
 
                         /* Permissões para Categoria do Produto */
                         .requestMatchers(HttpMethod.POST, "/categoriaProduto").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/categoriaProduto").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/categoriaProduto").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/categoriaProduto").hasRole("USER")
+
+                        /* Permissões para Marca do Produto */
+                        .requestMatchers(HttpMethod.POST, "/marcaProduto").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/marcaProduto").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/marcaProduto").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/marcaProduto").hasRole("USER")
+
+
+
 
                         /* Permissão para consultar CEPs, CNPJs */
                         .requestMatchers(HttpMethod.GET, "/pessoa/consultarCep/*").hasRole("USER")
