@@ -1,5 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoCadastrarDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoExibirDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -62,7 +64,58 @@ public class Produto implements Serializable {
     private Boolean alertaQtdEstoque = Boolean.FALSE;
     private Integer qtdClique = 0;
 
-    @ManyToOne(targetEntity = Pessoa.class)
+    @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-    private Pessoa empresa;
+    private PessoaJuridica empresa;
+
+    @ManyToOne(targetEntity = CategoriaProduto.class)
+    @JoinColumn(name = "categoria_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "categoria_produto_id_fk"))
+    private CategoriaProduto categoriaProduto;
+
+    @ManyToOne(targetEntity = MarcaProduto.class)
+    @JoinColumn(name = "marca_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "marca_produto_id_fk"))
+    private MarcaProduto marcaProduto;
+
+    public Produto(ProdutoCadastrarDTO produtoCadastrarDTO) {
+        this.id =  produtoCadastrarDTO.id();
+        this.tipoUnidade =  produtoCadastrarDTO.tipoUnidade();
+        this.nome = produtoCadastrarDTO.nome();
+        this.ativo =  produtoCadastrarDTO.ativo();
+        this.descricao = produtoCadastrarDTO.descricao();
+        this.peso = produtoCadastrarDTO.peso();
+        this.largura = produtoCadastrarDTO.largura();
+        this.altura = produtoCadastrarDTO.altura();
+        this.profundidade = produtoCadastrarDTO.profundidade();
+        this.valorVenda = produtoCadastrarDTO.valorVenda();
+        this.qtdEstoque = produtoCadastrarDTO.qtdEstoque();
+        this.qtdAlertaEstoque = produtoCadastrarDTO.qtdAlertaEstoque();
+        this.linkYoutube = produtoCadastrarDTO.linkYoutube();
+        this.alertaQtdEstoque = produtoCadastrarDTO.alertaQtdEstoque();
+        this.qtdClique = produtoCadastrarDTO.qtdClique();
+        this.peso = produtoCadastrarDTO.peso();
+        this.empresa = produtoCadastrarDTO.empresa();
+        this.categoriaProduto =produtoCadastrarDTO.categoriaProduto();
+        this.marcaProduto = produtoCadastrarDTO.marcaProduto();
+    }
+
+    public ProdutoExibirDTO converterProdutoExibirDTO() {
+        return new ProdutoExibirDTO(this.id,
+                this.tipoUnidade,
+                this.nome,
+                this.ativo,
+                this.descricao,
+                this.peso,
+                this.largura,
+                this.altura,
+                this.profundidade,
+                this.valorVenda,
+                this.qtdEstoque,
+                this.qtdAlertaEstoque,
+                this.linkYoutube,
+                this.alertaQtdEstoque,
+                this.qtdClique,
+                this.empresa.getId(),
+                this.categoriaProduto.getId(),
+                this.marcaProduto.getId());
+    }
 }

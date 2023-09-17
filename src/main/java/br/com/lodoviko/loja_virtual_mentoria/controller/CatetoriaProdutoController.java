@@ -4,7 +4,6 @@ import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.CategoriaProduto;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.CategoriaProdutoDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.CategoriaProdutoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +15,15 @@ import java.util.List;
 @RequestMapping("categoriaProduto")
 public class CatetoriaProdutoController {
 
-    @Autowired
-    CategoriaProdutoService categoriaProdutoService;
+    private  final CategoriaProdutoService categoriaProdutoService;
+
+    public CatetoriaProdutoController(CategoriaProdutoService categoriaProdutoService) {
+        this.categoriaProdutoService = categoriaProdutoService;
+    }
 
     @Transactional
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<CategoriaProdutoDTO> cadastrarCategoriaProduto(@RequestBody CategoriaProduto categoriaProduto) throws ExceptionMentoriaJava {
         CategoriaProdutoDTO categoriaProdutoDTO = categoriaProdutoService.cadastrar(categoriaProduto);
         return new ResponseEntity<CategoriaProdutoDTO>(categoriaProdutoDTO, HttpStatus.OK);
@@ -44,6 +47,14 @@ public class CatetoriaProdutoController {
     public ResponseEntity<List<CategoriaProdutoDTO>> listarCategoriaProduto() {
         var categoriaProdutoDTOs = categoriaProdutoService.listar().stream().map(CategoriaProdutoDTO::new);
         return new ResponseEntity<List<CategoriaProdutoDTO>>(categoriaProdutoDTOs.toList(),HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoriaProdutoDTO> buscar(@PathVariable Long id) {
+        return categoriaProdutoService.buscarPorId(id)
+                .map(CategoriaProdutoDTO::new)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }

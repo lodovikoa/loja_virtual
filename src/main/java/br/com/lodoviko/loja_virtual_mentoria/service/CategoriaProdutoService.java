@@ -4,16 +4,19 @@ import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.CategoriaProduto;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.CategoriaProdutoDTO;
 import br.com.lodoviko.loja_virtual_mentoria.repository.CategoriaProdutoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoriaProdutoService {
 
-    @Autowired
-    private CategoriaProdutoRepository categoriaProdutoRepository;
+    private final CategoriaProdutoRepository categoriaProdutoRepository;
+
+    public CategoriaProdutoService(CategoriaProdutoRepository categoriaProdutoRepository) {
+        this.categoriaProdutoRepository = categoriaProdutoRepository;
+    }
 
     public CategoriaProdutoDTO cadastrar(CategoriaProduto categoriaProduto) throws ExceptionMentoriaJava {
 
@@ -71,5 +74,9 @@ public class CategoriaProdutoService {
 
     public List<CategoriaProduto> listar() {
         return categoriaProdutoRepository.findAll();
+    }
+
+    public Optional<CategoriaProduto> buscarPorId(Long id) {
+        return categoriaProdutoRepository.findById(id);
     }
 }

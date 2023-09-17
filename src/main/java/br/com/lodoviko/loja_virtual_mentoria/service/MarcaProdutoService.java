@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MarcaProdutoService {
@@ -60,6 +61,10 @@ public class MarcaProdutoService {
 
     public List<MarcaProduto> listar() {
         return marcaProdutoRepository.findAll();
+    }
+
+    public Optional<MarcaProduto> buscarPorId(Long id) {
+        return marcaProdutoRepository.findById(id);
     }
 
     private void validarMarcaProduto(MarcaProduto marcaProduto) throws ExceptionMentoriaJava {

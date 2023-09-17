@@ -5,7 +5,6 @@ import br.com.lodoviko.loja_virtual_mentoria.model.MarcaProduto;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.MarcaProdutoDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.MarcaProdutoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +16,11 @@ import java.util.List;
 @RequestMapping("marcaProduto")
 public class MarcaProdutoController {
 
-    @Autowired
-    private MarcaProdutoService marcaProdutoService;
+    private final MarcaProdutoService marcaProdutoService;
+
+    public MarcaProdutoController(MarcaProdutoService marcaProdutoService) {
+        this.marcaProdutoService = marcaProdutoService;
+    }
 
     @Transactional
     @PostMapping
@@ -45,5 +47,13 @@ public class MarcaProdutoController {
     public ResponseEntity<List<MarcaProdutoDTO>> listarMarcaProduto() {
         var marcaProdutoDTOs = marcaProdutoService.listar().stream().map(MarcaProdutoDTO::new);
         return new ResponseEntity<List<MarcaProdutoDTO>>(marcaProdutoDTOs.toList(), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<MarcaProdutoDTO> buscarPorId(@PathVariable Long id) {
+        return marcaProdutoService.buscarPorId(id)
+                .map(MarcaProdutoDTO::new)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }
