@@ -76,6 +76,10 @@ public class Produto implements Serializable {
     @JoinColumn(name = "marca_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "marca_produto_id_fk"))
     private MarcaProduto marcaProduto;
 
+    @ManyToOne(targetEntity = NotaItemProduto.class)
+    @JoinColumn(name = "nota_item_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_item_produto_id_fk"))
+    private NotaItemProduto notaItemProduto;
+
     public Produto(ProdutoCadastrarDTO produtoCadastrarDTO) {
         this.id =  produtoCadastrarDTO.id();
         this.tipoUnidade =  produtoCadastrarDTO.tipoUnidade();
@@ -96,6 +100,8 @@ public class Produto implements Serializable {
         this.empresa = produtoCadastrarDTO.empresa();
         this.categoriaProduto =produtoCadastrarDTO.categoriaProduto();
         this.marcaProduto = produtoCadastrarDTO.marcaProduto();
+        this.notaItemProduto = produtoCadastrarDTO.notaItemProduto();
+
     }
 
     public ProdutoExibirDTO converterProdutoExibirDTO() {

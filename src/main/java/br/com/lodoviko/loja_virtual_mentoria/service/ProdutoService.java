@@ -21,6 +21,14 @@ public class ProdutoService {
             throw new ExceptionMentoriaJava("Não informar o ID do produto no cadastro.");
         }
 
+        if(dadosDTO.empresa() == null || dadosDTO.empresa().getId() == null) {
+            throw new ExceptionMentoriaJava("Faltou informar a Empresa.");
+        }
+
+        if(produtoRepository.existsByNomeAndEmpresa(dadosDTO.nome().trim(), dadosDTO.empresa())) {
+            throw new ExceptionMentoriaJava("Já existe um produto com nome " + dadosDTO.nome() + " cadastrado.");
+        }
+
         return produtoRepository.save(new Produto(dadosDTO));
     }
 }
