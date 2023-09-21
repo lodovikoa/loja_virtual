@@ -1,16 +1,16 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
 import br.com.lodoviko.loja_virtual_mentoria.enuns.StatusContaPagar;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.ContaPagarExibirDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
@@ -57,4 +57,19 @@ public class ContaPagar implements Serializable {
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private Pessoa empresa;
 
+
+    public ContaPagarExibirDTO converterDTO() {
+        return new ContaPagarExibirDTO(
+                this.id,
+                this.descricao,
+                this.valorTotal,
+                this.valorDesconto,
+                this.status,
+                this.dtVencimento,
+                this.dtPagamento,
+                this.pessoa.getId(),
+                this.pessoaFornecedor.getId(),
+                this.empresa.getId()
+        );
+    }
 }
