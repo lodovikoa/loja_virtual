@@ -1,10 +1,8 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.NotaFiscalCompraExibirDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,6 +11,8 @@ import java.util.Date;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"id"})
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "tb_nota_fiscal_compra")
 public class NotaFiscalCompra implements Serializable {
@@ -45,15 +45,31 @@ public class NotaFiscalCompra implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dataCompra;
 
-    @ManyToOne(targetEntity = Pessoa.class)
+    @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "pessoa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "pessoa_fk"))
-    private Pessoa pessoa;
+    private PessoaJuridica pessoa;
 
     @ManyToOne
     @JoinColumn(name = "conta_pagar_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "conta_pagar_fk"))
     private ContaPagar contaPagar;
 
-    @ManyToOne(targetEntity = Pessoa.class)
+    @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-    private Pessoa empresa;
+    private PessoaJuridica empresa;
+
+    public NotaFiscalCompraExibirDTO converterDTO() {
+        return new NotaFiscalCompraExibirDTO(
+                this.id,
+                this.numeroNota,
+                this.serieNota,
+                this.descricaoObs,
+                this.valorTotal,
+                this.valorDesconto,
+                this.valorIcms,
+                this.dataCompra,
+                this.pessoa.getId(),
+                this.contaPagar.getId(),
+                this.empresa.getId()
+        );
+    }
 }

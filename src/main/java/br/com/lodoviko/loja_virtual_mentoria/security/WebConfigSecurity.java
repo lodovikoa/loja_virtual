@@ -62,6 +62,19 @@ public class WebConfigSecurity {
 
                         /* Permissões para Conta Pagar */
                         .requestMatchers(HttpMethod.POST, "/contaPagar").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/contaPagar").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/contaPagar").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/contaPagar/excluir/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/contaPagar/descricao/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/contaPagar/id/*").hasRole("USER")
+
+                        /* Permissões para Nota Fiscal de Compra - notaFiscalCompra */
+                        .requestMatchers(HttpMethod.POST, "/notaFiscalCompra").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/notaFiscalCompra").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/notaFiscalCompra").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "/notaFiscalCompra/excluir/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/notaFiscalCompra/descricao/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "/notaFiscalCompra/id/*").hasRole("USER")
 
                         /* Permissão para consultar CEPs, CNPJs */
                         .requestMatchers(HttpMethod.GET, "/pessoa/consultarCep/*").hasRole("USER")

@@ -2,7 +2,8 @@ package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
 import br.com.lodoviko.loja_virtual_mentoria.enuns.StatusContaPagar;
 import br.com.lodoviko.loja_virtual_mentoria.model.ContaPagar;
-import br.com.lodoviko.loja_virtual_mentoria.model.Pessoa;
+import br.com.lodoviko.loja_virtual_mentoria.model.PessoaFisica;
+import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -23,11 +24,11 @@ public record ContaPagarCadastrarDTO(
         Date dtVencimento,
         Date dtPagamento,
         @NotNull(message = "Faltou informar a Pessoa responável pela Conta a Pagar")
-        Pessoa pessoa,
+        PessoaFisica pessoa,
         @NotNull(message = "Faltou informar o Fornecedor")
-        Pessoa pessoaFornecedor,
+        PessoaJuridica pessoaFornecedor,
         @NotNull(message = "Faltou informar a Empresa")
-        Pessoa empresa
+        PessoaJuridica empresa
 ) {
         public ContaPagar converterDTO() {
                 return new ContaPagar(
