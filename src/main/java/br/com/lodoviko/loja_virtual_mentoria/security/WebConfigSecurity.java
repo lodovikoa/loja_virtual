@@ -76,6 +76,10 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.GET, "/notaFiscalCompra/descricao/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/notaFiscalCompra/id/*").hasRole("USER")
 
+                        /* Permissões para Nota Item Produto - notaItemProduto */
+                        .requestMatchers(HttpMethod.POST, "/notaItemProduto").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "/notaItemProduto").hasRole("USER")
+
                         /* Permissão para consultar CEPs, CNPJs */
                         .requestMatchers(HttpMethod.GET, "/pessoa/consultarCep/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/pessoa/consultarCnpj/*").hasRole("USER")

@@ -1,15 +1,15 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.NotaItemProdutoExibirDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "tb_nota_item_produto")
@@ -34,7 +34,17 @@ public class NotaItemProduto implements Serializable {
     @JoinColumn(name = "produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "produto_nota_item_fk"))
     private Produto produto;
 
-    @ManyToOne(targetEntity = Pessoa.class)
+    @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
-    private Pessoa empresa;
+    private PessoaJuridica empresa;
+
+    public NotaItemProdutoExibirDTO converterDTO() {
+        return new NotaItemProdutoExibirDTO(
+          this.id,
+          this.quantidade,
+          this.notaFiscalCompra.getId(),
+          this.produto.getId(),
+          this.empresa.getId()
+        );
+    }
 }

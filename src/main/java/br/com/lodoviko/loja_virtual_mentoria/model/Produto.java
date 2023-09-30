@@ -3,10 +3,7 @@ package br.com.lodoviko.loja_virtual_mentoria.model;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoCadastrarDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoExibirDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,6 +11,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "tb_produto")
@@ -34,7 +33,7 @@ public class Produto implements Serializable {
     private String nome;
 
     @Column(nullable = false)
-    private Boolean ativo = Boolean.TRUE;
+    private Boolean ativo;
 
     @Column(columnDefinition = "text", length = 2000, nullable = false)
     private String descricao;
@@ -54,14 +53,14 @@ public class Produto implements Serializable {
     private Double profundidade;
 
     @Column(nullable = false)
-    private BigDecimal valorVenda = BigDecimal.ZERO;
+    private BigDecimal valorVenda;
 
     @Column(nullable = false)
     private Integer qtdEstoque = 0;
 
     private Integer qtdAlertaEstoque = 0;
     private String linkYoutube;
-    private Boolean alertaQtdEstoque = Boolean.FALSE;
+    private Boolean alertaQtdEstoque;
     private Integer qtdClique = 0;
 
     @ManyToOne(targetEntity = PessoaJuridica.class)
@@ -75,10 +74,6 @@ public class Produto implements Serializable {
     @ManyToOne(targetEntity = MarcaProduto.class)
     @JoinColumn(name = "marca_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "marca_produto_id_fk"))
     private MarcaProduto marcaProduto;
-
-    @ManyToOne(targetEntity = NotaItemProduto.class)
-    @JoinColumn(name = "nota_item_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "nota_item_produto_id_fk"))
-    private NotaItemProduto notaItemProduto;
 
     public Produto(ProdutoCadastrarDTO produtoCadastrarDTO) {
         this.id =  produtoCadastrarDTO.id();
@@ -100,8 +95,6 @@ public class Produto implements Serializable {
         this.empresa = produtoCadastrarDTO.empresa();
         this.categoriaProduto =produtoCadastrarDTO.categoriaProduto();
         this.marcaProduto = produtoCadastrarDTO.marcaProduto();
-        this.notaItemProduto = produtoCadastrarDTO.notaItemProduto();
-
     }
 
     public ProdutoExibirDTO converterProdutoExibirDTO() {

@@ -2,7 +2,6 @@ package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
 import br.com.lodoviko.loja_virtual_mentoria.model.CategoriaProduto;
 import br.com.lodoviko.loja_virtual_mentoria.model.MarcaProduto;
-import br.com.lodoviko.loja_virtual_mentoria.model.NotaItemProduto;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -39,8 +38,6 @@ public record ProdutoCadastrarDTO(
         @NotNull(message = "A Categoria do Produto deve ser informada")
         CategoriaProduto categoriaProduto,
         @NotNull(message = "A Marca do Produto deve ser informada")
-        MarcaProduto marcaProduto,
-        @NotNull(message = "A Nota Item do Produto deve ser informada")
-        NotaItemProduto notaItemProduto
+        MarcaProduto marcaProduto
 ) {
 }
