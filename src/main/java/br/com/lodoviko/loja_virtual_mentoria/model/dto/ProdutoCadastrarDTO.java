@@ -1,12 +1,14 @@
 package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
 import br.com.lodoviko.loja_virtual_mentoria.model.CategoriaProduto;
+import br.com.lodoviko.loja_virtual_mentoria.model.ImagemProduto;
 import br.com.lodoviko.loja_virtual_mentoria.model.MarcaProduto;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaJuridica;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record ProdutoCadastrarDTO(
         Long id,
@@ -33,6 +35,8 @@ public record ProdutoCadastrarDTO(
         String linkYoutube,
         Boolean alertaQtdEstoque,
         Integer qtdClique,
+        List<ImagemProduto> imagens,
+
         @NotNull(message = "A empresa responsável deve ser informada")
         PessoaJuridica empresa,
         @NotNull(message = "A Categoria do Produto deve ser informada")

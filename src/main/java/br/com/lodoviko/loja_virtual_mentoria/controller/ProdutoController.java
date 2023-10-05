@@ -1,6 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.controller;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
+import br.com.lodoviko.loja_virtual_mentoria.model.Produto;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoCadastrarDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoExibirDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.ProdutoService;
@@ -24,7 +25,7 @@ public class ProdutoController {
 
     @PostMapping
     public ResponseEntity<ProdutoExibirDTO> salvarProduto(@Valid @RequestBody ProdutoCadastrarDTO produtoCadastrarDTO) throws ExceptionMentoriaJava {
-        var produto = produtoService.salvar(produtoCadastrarDTO);
+        var produto = produtoService.salvar(new Produto(produtoCadastrarDTO));
 
         return new ResponseEntity<ProdutoExibirDTO>(produto.converterProdutoExibirDTO(), HttpStatus.OK);
     }

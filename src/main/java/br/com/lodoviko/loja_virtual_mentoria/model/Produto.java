@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Getter
@@ -63,6 +64,9 @@ public class Produto implements Serializable {
     private Boolean alertaQtdEstoque;
     private Integer qtdClique = 0;
 
+    @OneToMany(mappedBy = "produto", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ImagemProduto> imagens;
+
     @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private PessoaJuridica empresa;
@@ -92,6 +96,7 @@ public class Produto implements Serializable {
         this.alertaQtdEstoque = produtoCadastrarDTO.alertaQtdEstoque();
         this.qtdClique = produtoCadastrarDTO.qtdClique();
         this.peso = produtoCadastrarDTO.peso();
+        this.imagens = produtoCadastrarDTO.imagens();
         this.empresa = produtoCadastrarDTO.empresa();
         this.categoriaProduto =produtoCadastrarDTO.categoriaProduto();
         this.marcaProduto = produtoCadastrarDTO.marcaProduto();
