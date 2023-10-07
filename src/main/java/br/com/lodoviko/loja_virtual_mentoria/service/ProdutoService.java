@@ -68,8 +68,8 @@ public class ProdutoService {
 
             if (bufferedImage != null) {
                 int type = bufferedImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
-                int largura = Integer.parseInt("80");
-                int altura = Integer.parseInt("60");
+                int largura = Integer.parseInt("800");
+                int altura = Integer.parseInt("600");
 
                 BufferedImage resizedImage = new BufferedImage(largura, altura, type);
                 Graphics2D g = resizedImage.createGraphics();
