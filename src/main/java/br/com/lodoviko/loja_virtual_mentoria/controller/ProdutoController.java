@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("produto")
 public class ProdutoController {
@@ -24,7 +26,7 @@ public class ProdutoController {
     }
 
     @PostMapping
-    public ResponseEntity<ProdutoExibirDTO> salvarProduto(@Valid @RequestBody ProdutoCadastrarDTO produtoCadastrarDTO) throws ExceptionMentoriaJava {
+    public ResponseEntity<ProdutoExibirDTO> salvarProduto(@Valid @RequestBody ProdutoCadastrarDTO produtoCadastrarDTO) throws ExceptionMentoriaJava, IOException {
         var produto = produtoService.salvar(new Produto(produtoCadastrarDTO));
 
         return new ResponseEntity<ProdutoExibirDTO>(produto.converterProdutoExibirDTO(), HttpStatus.OK);

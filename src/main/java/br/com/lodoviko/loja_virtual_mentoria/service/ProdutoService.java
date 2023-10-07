@@ -3,7 +3,15 @@ package br.com.lodoviko.loja_virtual_mentoria.service;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.Produto;
 import br.com.lodoviko.loja_virtual_mentoria.repository.ProdutoRepository;
+import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.stereotype.Service;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 @Service
 public class ProdutoService {
@@ -14,7 +22,7 @@ public class ProdutoService {
         this.produtoRepository = produtoRepository;
     }
 
-    public Produto salvar(Produto produto) throws ExceptionMentoriaJava {
+    public Produto salvar(Produto produto) throws ExceptionMentoriaJava, IOException {
 
         if(produto.getId() != null ) {
             throw new ExceptionMentoriaJava("Não informar o ID do produto no cadastro.");
@@ -48,17 +56,42 @@ public class ProdutoService {
             produto.getImagens().get(x).setProduto(produto);
             produto.getImagens().get(x).setEmpresa(produto.getEmpresa());
 
-            produto.getImagens().get(x).setImagemMiniatura("miniimagem");
+            String base64Imagem = "";
+            if (produto.getImagens().get(x).getImagemOriginal().contains("data:image")) {
+                base64Imagem = produto.getImagens().get(x).getImagemOriginal().split(",")[1];
+            } else {
+                base64Imagem = produto.getImagens().get(x).getImagemOriginal();
+            }
+
+            byte[] imageBytes = DatatypeConverter.parseBase64Binary(base64Imagem);
+            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
+
+            if (bufferedImage != null) {
+                int type = bufferedImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
+                int largura = Integer.parseInt("80");
+                int altura = Integer.parseInt("60");
+
+                BufferedImage resizedImage = new BufferedImage(largura, altura, type);
+                Graphics2D g = resizedImage.createGraphics();
+                g.drawImage(bufferedImage, 0, 0, largura, altura, null);
+                g.dispose();
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(resizedImage, "png", baos);
+
+                String miniImgBase64 = "data:image/png;base64," + DatatypeConverter.printBase64Binary(baos.toByteArray());
+
+                produto.getImagens().get(x).setImagemMiniatura(miniImgBase64);
+
+                bufferedImage.flush();
+                resizedImage.flush();
+                baos.flush();
+                baos.close();
+            }
         }
 
-
-
-        // Mais validações
+            // Mais validações
         /*
-        -- OK -- Validar Tipo de Unidade (tipoUnidade), que deve ser informada
-        -- OK -- Validar nome do produto (nome) que deve ter 10 ou mais caracteres
-        -- OK -- Validar quantidade de estoque que deve ser informado pelo menos 1 ou mais
-
         Validar AlertaEstoque && produto.getqtdeEstoque <= 1 enviar email
             StringBuider html = new Stringbuilder();
             html.append("<h2>")
@@ -70,56 +103,6 @@ public class ProdutoService {
                 serviceSendEmail.enviarEmailHtml("Produto com estoque baixo", html.toString(), produto.getEmpresa.getEmail());
              }
 
-          --- Mapear na classe Produto.java a relação de Produto com ImagemProduto
-          -- OK --     @OneToMany(mappedBy = "produto", orphanRemloval = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-          -- OK --    private List<ImagemProduto> imagens = new ArrayList<ImagemProduto>();
-
-          -- OK -- Validar Imagen informada no cadastro do produto (Imanges não pode ser null, vazio ou tamanho = 0)
-          -- OK -- Validar Imagen deve ter pelo menos 3 imagens e não pode ser maior que 6
-
-            Associar as imagens ao produto que está sendo cadastrado
-            Trabalhar com Imagem base64
-            if(produto.getId() == null) {
-                for(int x = 0; x < produto.getImagens().size(); x++) {
-                   -- OK -- produto.getImagens().get(x).setProduto(produto);
-                   -- OK -- produto.getImagens().get(x).setEmpresa(produto.getEmpresa());
-
-                    String base64Imagem = "";
-                    if(produto.getImagens().get(x).getImagemOriginal().contains("data:image")) {
-                        base64Imagem = produto.getImagens().get(x).getImagemOriginal.split(",")[1];
-                    } else {
-                        base64Imagem = produto.getImagens().get(x).getImagemOriginal();
-                    }
-
-                    byte[] imagemBytes = DatatypeConverter.parseBase64Binary(base64Imagem);
-                    BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
-
-                    if(bufferedImage != null) {
-                        int type = bufferedImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
-                        int largura = Integer.parseInt("800");
-                        int altura = Integer.parseInt("600");
-
-                        BufferedImage resizeImage = new BufferedImage(largura, altura, type);
-                        Graphics2D g = resizeImage.createGraphics();
-                        g.drawImage(bufferedImage, 0, 0, largura, altura, null);
-                        g.dispose();
-
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(resizedImage, "png", baos);
-
-                        String miniImgBase64 = "data:image/png;base64," + DatatypeConverter.printBase64Binary(baos.toByteArray());
-
-                        produto.getImagens().get(x).setImagemMiniatura(miniImgBase64);
-
-                        bufferedImage.flush();
-                        resizedImage.flush();
-                        baos.flush();
-                        baos.close();
-                    }
-                }
-            }
-
-            Parou video em 53:10
         * */
 
         return produtoRepository.save(produto);
