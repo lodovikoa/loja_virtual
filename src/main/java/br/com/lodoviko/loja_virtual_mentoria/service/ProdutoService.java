@@ -4,6 +4,7 @@ import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.Produto;
 import br.com.lodoviko.loja_virtual_mentoria.repository.ProdutoRepository;
 import jakarta.xml.bind.DatatypeConverter;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -13,14 +14,11 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+@AllArgsConstructor
 @Service
 public class ProdutoService {
 
     private final ProdutoRepository produtoRepository;
-
-    public ProdutoService(ProdutoRepository produtoRepository) {
-        this.produtoRepository = produtoRepository;
-    }
 
     public Produto salvar(Produto produto) throws ExceptionMentoriaJava, IOException {
 

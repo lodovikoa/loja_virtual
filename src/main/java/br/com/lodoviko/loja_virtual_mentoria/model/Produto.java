@@ -79,6 +79,10 @@ public class Produto implements Serializable {
     @JoinColumn(name = "marca_produto_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "marca_produto_id_fk"))
     private MarcaProduto marcaProduto;
 
+    public Produto(Long id) {
+        this.id = id;
+    }
+
     public Produto(ProdutoCadastrarDTO produtoCadastrarDTO) {
         this.id =  produtoCadastrarDTO.id();
         this.tipoUnidade =  produtoCadastrarDTO.tipoUnidade();

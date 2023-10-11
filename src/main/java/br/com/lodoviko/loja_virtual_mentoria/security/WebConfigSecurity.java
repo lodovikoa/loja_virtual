@@ -84,6 +84,12 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.GET, "/pessoa/consultarCep/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/pessoa/consultarCnpj/*").hasRole("USER")
 
+                        /* Permissão para Imagem do Produto */
+                        .requestMatchers(HttpMethod.GET, "imagemProduto/listarPorProduto/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "imagemProduto/excluir/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "imagemProduto/excluirPorProduto/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "imagemProduto/cadastrar").hasRole("USER")
+
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()
                 )
