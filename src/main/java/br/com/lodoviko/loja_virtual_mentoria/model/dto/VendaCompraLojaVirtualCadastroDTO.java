@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public record VendaCompraLojaVirtualCadastroDTO(
         Long id,
@@ -38,7 +39,8 @@ public record VendaCompraLojaVirtualCadastroDTO(
         Date dataEntrega,
 
         @NotNull(message = "Faltou informar a Empresa")
-        PessoaJuridica empresa
+        PessoaJuridica empresa,
+        List<ItemVendaLoja> itemVendasLoja
 ) {
     public VendaCompraLojaVirtual converterDTO() {
         return new VendaCompraLojaVirtual(this.id,
@@ -54,7 +56,8 @@ public record VendaCompraLojaVirtualCadastroDTO(
                 this.diaEntrega,
                 this.dataVenda,
                 this.dataEntrega,
-                this.empresa
+                this.empresa,
+                this.itemVendasLoja
             );
     }
 }

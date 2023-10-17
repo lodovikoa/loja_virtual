@@ -10,6 +10,8 @@ import br.com.lodoviko.loja_virtual_mentoria.repository.VendaCompraLojaVirtualRe
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @Service
 public class VendaCompraLojaVirtualService {
@@ -48,5 +50,9 @@ public class VendaCompraLojaVirtualService {
         vendaCompraLojaVirtual.setPessoa(pessoa);
 
         return vendaCompraLojaVirtualRepository.save(vendaCompraLojaVirtual);
+    }
+
+    public Optional<VendaCompraLojaVirtual> consultarPorId(Long id) throws ExceptionMentoriaJava {
+        return vendaCompraLojaVirtualRepository.findById(id);
     }
 }
