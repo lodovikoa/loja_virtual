@@ -97,6 +97,12 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.GET, "avaliacaoProduto/listarPorProdutoPessoa/*/*").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, "avaliacaoProduto/excluir/*").hasRole("USER")
 
+                        /* Permissão para Forma de Pagamento */
+                        .requestMatchers(HttpMethod.POST, "formaPagamento/cadastrar").hasRole("USER")
+
+                        /* Permissão para Vendas da Loja Virtual */
+                        .requestMatchers(HttpMethod.POST, "vendaLoja/cadastrar").hasRole("USER")
+
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()
                 )
