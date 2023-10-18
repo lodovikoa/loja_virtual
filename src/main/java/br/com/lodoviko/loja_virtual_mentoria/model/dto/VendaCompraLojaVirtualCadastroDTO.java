@@ -40,7 +40,7 @@ public record VendaCompraLojaVirtualCadastroDTO(
 
         @NotNull(message = "Faltou informar a Empresa")
         PessoaJuridica empresa,
-        List<ItemVendaLoja> itemVendasLoja
+        List<ItemVendaLoja> itensVendaLoja
 ) {
     public VendaCompraLojaVirtual converterDTO() {
         return new VendaCompraLojaVirtual(this.id,
@@ -57,7 +57,7 @@ public record VendaCompraLojaVirtualCadastroDTO(
                 this.dataVenda,
                 this.dataEntrega,
                 this.empresa,
-                this.itemVendasLoja
+                this.itensVendaLoja
             );
     }
 }

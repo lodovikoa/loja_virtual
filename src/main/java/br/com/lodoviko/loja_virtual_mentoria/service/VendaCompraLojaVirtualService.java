@@ -37,6 +37,10 @@ public class VendaCompraLojaVirtualService {
             throw new ExceptionMentoriaJava("Faltou informar a Pessoa que fez a compra.");
         }
 
+        if(vendaCompraLojaVirtual.getItensVendaLoja() == null || vendaCompraLojaVirtual.getItensVendaLoja().size() == 0) {
+            throw new ExceptionMentoriaJava("Faltou informar os produtos da venda.");
+        }
+
         // Buscar Endereço cadastrado
         Endereco enderecoEntrega = enderecoRepository.findById(vendaCompraLojaVirtual.getEnderecoEntrega().getId()).get();
         Endereco enderecoCobranca = enderecoRepository.findById(vendaCompraLojaVirtual.getEnderecoCobranca().getId()).get();
@@ -48,6 +52,12 @@ public class VendaCompraLojaVirtualService {
         vendaCompraLojaVirtual.setEnderecoCobranca(enderecoCobranca);
 
         vendaCompraLojaVirtual.setPessoa(pessoa);
+
+        // Ajustar os produtos informados na venda
+        for(int i = 0; i < vendaCompraLojaVirtual.getItensVendaLoja().size(); i++) {
+            vendaCompraLojaVirtual.getItensVendaLoja().get(i).setEmpresa(vendaCompraLojaVirtual.getEmpresa());
+            vendaCompraLojaVirtual.getItensVendaLoja().get(i).setVendaCompraLojaVirtual(vendaCompraLojaVirtual);
+        }
 
         return vendaCompraLojaVirtualRepository.save(vendaCompraLojaVirtual);
     }

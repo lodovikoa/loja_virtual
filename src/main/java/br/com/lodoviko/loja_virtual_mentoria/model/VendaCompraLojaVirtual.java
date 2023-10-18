@@ -1,10 +1,13 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.ItemVendaLojaExibirDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoExibirReduzidoDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -73,5 +76,20 @@ public class VendaCompraLojaVirtual implements Serializable {
     private PessoaJuridica empresa;
 
     @OneToMany(mappedBy = "vendaCompraLojaVirtual", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<ItemVendaLoja> itemVendasLoja;
+    private List<ItemVendaLoja> itensVendaLoja;
+
+    public List<ItemVendaLojaExibirDTO> converterItens(List<ItemVendaLoja> itensVendaLoja) {
+       List<ItemVendaLojaExibirDTO> itens = new ArrayList<>();
+
+       for (int i = 0; i < itensVendaLoja.size(); i++) {
+           ItemVendaLojaExibirDTO item = new ItemVendaLojaExibirDTO(itensVendaLoja.get(i).getId(), itensVendaLoja.get(i).getQuantidade(),
+                   new ProdutoExibirReduzidoDTO(
+                           itensVendaLoja.get(i).getProduto().getId(),
+                           itensVendaLoja.get(i).getProduto().getTipoUnidade(),
+                           itensVendaLoja.get(i).getProduto().getNome()));
+           itens.add(item);
+
+       }
+       return itens;
+    }
 }
