@@ -6,6 +6,7 @@ import br.com.lodoviko.loja_virtual_mentoria.model.dto.VendaCompraLojaVirtualExi
 import br.com.lodoviko.loja_virtual_mentoria.service.VendaCompraLojaVirtualService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,12 @@ public class VendaCompraLojaVirtualController {
                 .map(VendaCompraLojaVirtualExibirDTO :: new)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Transactional
+    @DeleteMapping("excluir/{idVenda}")
+    public ResponseEntity<Void> excluirVendaTotal(@PathVariable Long idVenda) throws ExceptionMentoriaJava {
+        vendaCompraLojaVirtualService.excluirVendaTotal(idVenda);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

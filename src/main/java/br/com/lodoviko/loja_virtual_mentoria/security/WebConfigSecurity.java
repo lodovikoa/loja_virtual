@@ -103,6 +103,7 @@ public class WebConfigSecurity {
                         /* Permissão para Vendas da Loja Virtual */
                         .requestMatchers(HttpMethod.POST, "vendaLoja/cadastrar").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "vendaLoja/id/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "vendaLoja/excluir/*").hasRole("USER")
 
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()

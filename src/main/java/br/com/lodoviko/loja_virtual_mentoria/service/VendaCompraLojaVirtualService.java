@@ -3,10 +3,9 @@ package br.com.lodoviko.loja_virtual_mentoria.service;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.Endereco;
 import br.com.lodoviko.loja_virtual_mentoria.model.PessoaFisica;
+import br.com.lodoviko.loja_virtual_mentoria.model.StatusRastreio;
 import br.com.lodoviko.loja_virtual_mentoria.model.VendaCompraLojaVirtual;
-import br.com.lodoviko.loja_virtual_mentoria.repository.EnderecoRepository;
-import br.com.lodoviko.loja_virtual_mentoria.repository.PessoaFisicaRepository;
-import br.com.lodoviko.loja_virtual_mentoria.repository.VendaCompraLojaVirtualRepository;
+import br.com.lodoviko.loja_virtual_mentoria.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,14 +18,8 @@ public class VendaCompraLojaVirtualService {
     private final VendaCompraLojaVirtualRepository vendaCompraLojaVirtualRepository;
     private final EnderecoRepository enderecoRepository;
     private final PessoaFisicaRepository pessoaFisicaRepository;
-
-    /*
-
-    * public VendaCompraLojaVirtual salvar(VendaCompraLojaVirtual vd) {
-    *   Validar associação com Pessoa
-    *   Validar associação com Produto
-    * }
-    *  */
+    private final StatusRastreioRepository statusRastreioRepository;
+    private final NotaFiscalVendaRepository notaFiscalVendaRepository;
 
     public VendaCompraLojaVirtual salvar(VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava {
         if(vendaCompraLojaVirtual.getId() != null) {
@@ -59,10 +52,33 @@ public class VendaCompraLojaVirtualService {
             vendaCompraLojaVirtual.getItensVendaLoja().get(i).setVendaCompraLojaVirtual(vendaCompraLojaVirtual);
         }
 
-        return vendaCompraLojaVirtualRepository.save(vendaCompraLojaVirtual);
+        vendaCompraLojaVirtual = vendaCompraLojaVirtualRepository.save(vendaCompraLojaVirtual);
+
+        StatusRastreio statusRastreio = new StatusRastreio(null,"Loja Local", "Local", "ES", "Venda Inicial", vendaCompraLojaVirtual, vendaCompraLojaVirtual.getEmpresa());
+        statusRastreioRepository.save(statusRastreio);
+
+        return vendaCompraLojaVirtual;
     }
 
     public Optional<VendaCompraLojaVirtual> consultarPorId(Long id) throws ExceptionMentoriaJava {
         return vendaCompraLojaVirtualRepository.findById(id);
+    }
+
+    public  void excluirVendaTotal(Long idVenda) throws ExceptionMentoriaJava {
+        if(!vendaCompraLojaVirtualRepository.existsById(idVenda)) {
+            throw new ExceptionMentoriaJava("Registro com ID " + idVenda + " não encontrado.");
+        }
+
+        // Alterar todas as vendas registradas na Nota Fiscal de Venda setando NULL no identificador da Venda na Nota Fiscal de Venda
+        notaFiscalVendaRepository.alterarTodasVendasParaPermitirExclusao(idVenda);
+
+        // Excluir todas as vendas registradas na Nota Fiscal de Venda cujo associação com a Venda seja NULL, ou seja não tem associação
+        notaFiscalVendaRepository.excluirTodasNotaFiscalSemVendaAssociada();
+
+        // Excluir todos registros de rastreio
+        statusRastreioRepository.excluirTodosRastreiosDeUmaVenda(idVenda);
+
+        // Excluir a Venda
+        vendaCompraLojaVirtualRepository.deleteById(idVenda);
     }
 }
