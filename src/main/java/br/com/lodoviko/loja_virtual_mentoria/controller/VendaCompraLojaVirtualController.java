@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("vendaLoja")
@@ -50,5 +52,12 @@ public class VendaCompraLojaVirtualController {
     public ResponseEntity<Void> reativarVendaLogicamente(@PathVariable Long idVenda ) throws ExceptionMentoriaJava {
         vendaCompraLojaVirtualService.reativarLogicamente(idVenda);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("listarPorProduto/{idProduto}")
+    public ResponseEntity<List<VendaCompraLojaVirtualExibirDTO>> listarVendasPorProduto(@PathVariable Long idProduto) throws Exception {
+        var retorno = vendaCompraLojaVirtualService.listarVendasPorProduto(idProduto);
+
+        return ResponseEntity.ok(retorno.stream().map(VendaCompraLojaVirtualExibirDTO :: new).toList());
     }
 }

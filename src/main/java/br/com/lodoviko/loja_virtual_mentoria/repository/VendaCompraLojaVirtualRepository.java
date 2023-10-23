@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface VendaCompraLojaVirtualRepository extends JpaRepository<VendaCompraLojaVirtual, Long> {
 
@@ -23,4 +25,7 @@ public interface VendaCompraLojaVirtualRepository extends JpaRepository<VendaCom
     @Modifying
     @Query("update VendaCompraLojaVirtual v set v.excluido = false where v.id = :id")
     void reativarLogicamente(@Param("id") Long id);
+
+    @Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.id = ?1")
+    List<VendaCompraLojaVirtual> listarVendasPorProduto(Long idProduto);
 }

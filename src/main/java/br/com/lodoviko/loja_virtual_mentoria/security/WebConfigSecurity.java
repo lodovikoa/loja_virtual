@@ -106,6 +106,7 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.DELETE, "vendaLoja/excluir/*").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "vendaLoja/excluirLogicamente/*").hasRole("USER")
                         .requestMatchers(HttpMethod.PUT, "vendaLoja/reativarLogicamente/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "vendaLoja/listarPorProduto/*").hasRole("USER")
 
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()

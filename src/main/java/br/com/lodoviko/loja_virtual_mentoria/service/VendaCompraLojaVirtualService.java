@@ -9,6 +9,8 @@ import br.com.lodoviko.loja_virtual_mentoria.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class VendaCompraLojaVirtualService {
@@ -106,6 +108,9 @@ public class VendaCompraLojaVirtualService {
 
     /*
     * Listar todas as vendas que pussui um determinado produto.
-    * Qyery("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.id = ?1")
+    * Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.id = ?1")
     *  */
+    public List<VendaCompraLojaVirtual> listarVendasPorProduto(Long idProduto) throws ExceptionMentoriaJava {
+        return vendaCompraLojaVirtualRepository.listarVendasPorProduto(idProduto);
+    }
 }
