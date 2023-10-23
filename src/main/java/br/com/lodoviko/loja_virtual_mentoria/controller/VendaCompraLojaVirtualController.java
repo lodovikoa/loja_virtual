@@ -1,6 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.controller;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
+import br.com.lodoviko.loja_virtual_mentoria.model.VendaCompraLojaVirtual;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.VendaCompraLojaVirtualCadastroDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.VendaCompraLojaVirtualExibirDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.VendaCompraLojaVirtualService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -57,6 +59,17 @@ public class VendaCompraLojaVirtualController {
     @GetMapping("listarPorProduto/{idProduto}")
     public ResponseEntity<List<VendaCompraLojaVirtualExibirDTO>> listarVendasPorProduto(@PathVariable Long idProduto) throws Exception {
         var retorno = vendaCompraLojaVirtualService.listarVendasPorProduto(idProduto);
+
+        return ResponseEntity.ok(retorno.stream().map(VendaCompraLojaVirtualExibirDTO :: new).toList());
+    }
+
+    @GetMapping("listarVendaDinamica/{tipoConsulta}/{valor}")
+    public ResponseEntity<List<VendaCompraLojaVirtualExibirDTO>> listarVendasDinamica(@PathVariable String tipoConsulta, @PathVariable String valor) throws ExceptionMentoriaJava {
+        var retorno = new ArrayList<VendaCompraLojaVirtual>();
+
+        if(tipoConsulta.equalsIgnoreCase("ID_PRODUTO")) {
+            retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualService.listarVendasPorProduto(Long.parseLong(valor));
+        }
 
         return ResponseEntity.ok(retorno.stream().map(VendaCompraLojaVirtualExibirDTO :: new).toList());
     }
