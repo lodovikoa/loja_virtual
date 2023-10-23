@@ -27,16 +27,28 @@ public class VendaCompraLojaVirtualController {
 
     @GetMapping("id/{id}")
     public ResponseEntity<VendaCompraLojaVirtualExibirDTO> consultarPorId(@PathVariable Long id) throws ExceptionMentoriaJava {
-        return vendaCompraLojaVirtualService.consultarPorId(id)
-                .map(VendaCompraLojaVirtualExibirDTO :: new)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        var retorno = vendaCompraLojaVirtualService.consultarPorId(id);
+        return retorno != null? ResponseEntity.ok(new VendaCompraLojaVirtualExibirDTO(retorno)) : ResponseEntity.notFound().build();
     }
 
     @Transactional
     @DeleteMapping("excluir/{idVenda}")
     public ResponseEntity<Void> excluirVendaTotal(@PathVariable Long idVenda) throws ExceptionMentoriaJava {
         vendaCompraLojaVirtualService.excluirVendaTotal(idVenda);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Transactional
+    @PutMapping("excluirLogicamente/{idVenda}")
+    public ResponseEntity<Void> excluirVendaLogicamente(@PathVariable Long idVenda) throws ExceptionMentoriaJava {
+        vendaCompraLojaVirtualService.excluirLogicamente(idVenda);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Transactional
+    @PutMapping("reativarLogicamente/{idVenda}")
+    public ResponseEntity<Void> reativarVendaLogicamente(@PathVariable Long idVenda ) throws ExceptionMentoriaJava {
+        vendaCompraLojaVirtualService.reativarLogicamente(idVenda);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -9,8 +9,6 @@ import br.com.lodoviko.loja_virtual_mentoria.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @AllArgsConstructor
 @Service
 public class VendaCompraLojaVirtualService {
@@ -60,8 +58,9 @@ public class VendaCompraLojaVirtualService {
         return vendaCompraLojaVirtual;
     }
 
-    public Optional<VendaCompraLojaVirtual> consultarPorId(Long id) throws ExceptionMentoriaJava {
-        return vendaCompraLojaVirtualRepository.findById(id);
+    public VendaCompraLojaVirtual consultarPorId(Long id) throws ExceptionMentoriaJava {
+       // return vendaCompraLojaVirtualRepository.findById(id);
+        return vendaCompraLojaVirtualRepository.findByIdAndExcluidoIsFalse(id);
     }
 
     public  void excluirVendaTotal(Long idVenda) throws ExceptionMentoriaJava {
@@ -81,4 +80,32 @@ public class VendaCompraLojaVirtualService {
         // Excluir a Venda
         vendaCompraLojaVirtualRepository.deleteById(idVenda);
     }
+
+    public void excluirLogicamente(Long id) throws ExceptionMentoriaJava {
+        if(!vendaCompraLojaVirtualRepository.existsById(id)) {
+            throw new ExceptionMentoriaJava("ID da Venda não localizado.");
+        }
+        if(vendaCompraLojaVirtualRepository.existsByIdAndExcluidoIsTrue(id)) {
+            throw new ExceptionMentoriaJava("ID " + id + " Já encontra-se excluido logicamente.");
+        }
+
+        vendaCompraLojaVirtualRepository.excluirLogicamente(id);
+    }
+
+    public void reativarLogicamente(Long id) throws ExceptionMentoriaJava {
+        if(!vendaCompraLojaVirtualRepository.existsById(id)) {
+            throw new ExceptionMentoriaJava("ID da Venda não localizado.");
+        }
+
+        if(vendaCompraLojaVirtualRepository.existsByIdAndExcluidoIsFalse(id)) {
+            throw new ExceptionMentoriaJava("ID " + id + " Já encontra-se ativo.");
+        }
+
+        vendaCompraLojaVirtualRepository.reativarLogicamente(id);
+    }
+
+    /*
+    * Listar todas as vendas que pussui um determinado produto.
+    * Qyery("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.id = ?1")
+    *  */
 }

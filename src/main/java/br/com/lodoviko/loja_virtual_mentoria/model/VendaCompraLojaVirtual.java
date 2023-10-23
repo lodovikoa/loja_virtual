@@ -78,6 +78,8 @@ public class VendaCompraLojaVirtual implements Serializable {
     @OneToMany(mappedBy = "vendaCompraLojaVirtual", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemVendaLoja> itensVendaLoja;
 
+    private Boolean excluido = Boolean.FALSE;
+
     public List<ItemVendaLojaExibirDTO> converterItens(List<ItemVendaLoja> itensVendaLoja) {
        List<ItemVendaLojaExibirDTO> itens = new ArrayList<>();
 

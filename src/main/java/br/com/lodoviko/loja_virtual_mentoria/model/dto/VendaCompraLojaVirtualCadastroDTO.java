@@ -1,6 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
 import br.com.lodoviko.loja_virtual_mentoria.model.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
@@ -40,7 +41,10 @@ public record VendaCompraLojaVirtualCadastroDTO(
 
         @NotNull(message = "Faltou informar a Empresa")
         PessoaJuridica empresa,
-        List<ItemVendaLoja> itensVendaLoja
+        List<ItemVendaLoja> itensVendaLoja,
+
+        @JsonIgnore
+        Boolean excluido
 ) {
     public VendaCompraLojaVirtual converterDTO() {
         return new VendaCompraLojaVirtual(this.id,
@@ -57,7 +61,8 @@ public record VendaCompraLojaVirtualCadastroDTO(
                 this.dataVenda,
                 this.dataEntrega,
                 this.empresa,
-                this.itensVendaLoja
+                this.itensVendaLoja,
+                this.excluido
             );
     }
 }
