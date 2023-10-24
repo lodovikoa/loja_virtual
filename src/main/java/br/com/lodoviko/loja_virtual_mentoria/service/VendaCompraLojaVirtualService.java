@@ -9,6 +9,7 @@ import br.com.lodoviko.loja_virtual_mentoria.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -110,7 +111,20 @@ public class VendaCompraLojaVirtualService {
     * Listar todas as vendas que pussui um determinado produto.
     * Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.id = ?1")
     *  */
-    public List<VendaCompraLojaVirtual> listarVendasPorProduto(Long idProduto) throws ExceptionMentoriaJava {
-        return vendaCompraLojaVirtualRepository.listarVendasPorProduto(idProduto);
+    public List<VendaCompraLojaVirtual> listarVendasPorProduto(String tipoConsulta, String valor) throws ExceptionMentoriaJava {
+        var retorno = new ArrayList<VendaCompraLojaVirtual>();
+
+        if(tipoConsulta.equalsIgnoreCase("ID_PRODUTO")) {
+            retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualRepository.listarVendasPorIdProduto(Long.valueOf(valor));
+        } else if(tipoConsulta.equalsIgnoreCase("NOME_PRODUTO")) {
+            retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualRepository.listarVendasPorNomeProduto(valor.trim());
+        } else if(tipoConsulta.equalsIgnoreCase("NOME_CLIENTE")){
+            retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualRepository.listarVendasPorNomeCliente(valor.trim());
+        }else {
+            throw new ExceptionMentoriaJava("Tipo de Consulta " + tipoConsulta + " inválido.");
+        }
+
+
+        return retorno;
     }
 }

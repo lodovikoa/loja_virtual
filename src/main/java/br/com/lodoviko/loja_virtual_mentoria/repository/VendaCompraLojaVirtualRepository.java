@@ -27,5 +27,11 @@ public interface VendaCompraLojaVirtualRepository extends JpaRepository<VendaCom
     void reativarLogicamente(@Param("id") Long id);
 
     @Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.id = ?1")
-    List<VendaCompraLojaVirtual> listarVendasPorProduto(Long idProduto);
+    List<VendaCompraLojaVirtual> listarVendasPorIdProduto(Long idProduto);
+
+    @Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.nome like %?1%")
+    List<VendaCompraLojaVirtual> listarVendasPorNomeProduto(String nomeProduto);
+
+    @Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.vendaCompraLojaVirtual.pessoa.nome like %?1%")
+    List<VendaCompraLojaVirtual> listarVendasPorNomeCliente(String nomeCliente);
 }
