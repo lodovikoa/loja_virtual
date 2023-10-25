@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -54,9 +55,14 @@ public class VendaCompraLojaVirtualController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @GetMapping("listarVendaDinamica/{tipoConsulta}/{valor}")
-    public ResponseEntity<List<VendaCompraLojaVirtualExibirDTO>> listarVendasDinamica(@PathVariable String tipoConsulta, @PathVariable String valor) throws ExceptionMentoriaJava {
-        var retorno = vendaCompraLojaVirtualService.listarVendasPorProduto(tipoConsulta, valor);
+    @GetMapping("listarVendaDinamica")
+    public ResponseEntity<List<VendaCompraLojaVirtualExibirDTO>> listarVendasDinamica(
+            @RequestParam(value = "idProduto", required = false, defaultValue = "-1") int idProduto,
+            @RequestParam(value = "nomeProduto", required = false) String nomeProduto,
+            @RequestParam(value = "nomeCliente", required = false) String nomeCliente,
+            @RequestParam(value = "dataVendaInicio", required = false) Date dataVendaInicio,
+            @RequestParam(value = "dataVendaFim", required = false) Date dataVendaFim) throws ExceptionMentoriaJava {
+        var retorno = vendaCompraLojaVirtualService.listarVendasPorProduto(idProduto, nomeProduto, nomeCliente, dataVendaInicio, dataVendaFim);
 
         return ResponseEntity.ok(retorno.stream().map(VendaCompraLojaVirtualExibirDTO :: new).toList());
     }

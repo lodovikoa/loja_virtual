@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -34,4 +36,7 @@ public interface VendaCompraLojaVirtualRepository extends JpaRepository<VendaCom
 
     @Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.vendaCompraLojaVirtual.pessoa.nome like %?1%")
     List<VendaCompraLojaVirtual> listarVendasPorNomeCliente(String nomeCliente);
+
+    @Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.vendaCompraLojaVirtual.dataVenda between ?1 and ?2")
+    ArrayList<VendaCompraLojaVirtual> listarPorDataVenda(Date dataVendaInicio, Date dataVendaFim);
 }
