@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface StatusRastreioRepository extends JpaRepository<StatusRastreio, Long> {
 
     @Modifying
     @Query("delete from StatusRastreio s where s.vendaCompraLojaVirtual.id = :idVenda")
     void excluirTodosRastreiosDeUmaVenda(@Param("idVenda") Long idVenda);
+    @Query("from StatusRastreio s where s.vendaCompraLojaVirtual.id = :idVenda")
+    List<StatusRastreio> listarEstatusPorVenda(@Param("idVenda") Long idVenda);
 }

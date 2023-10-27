@@ -60,9 +60,10 @@ public class VendaCompraLojaVirtualController {
             @RequestParam(value = "idProduto", required = false, defaultValue = "-1") int idProduto,
             @RequestParam(value = "nomeProduto", required = false) String nomeProduto,
             @RequestParam(value = "nomeCliente", required = false) String nomeCliente,
+            @RequestParam(value = "idCliente", required = false) Long idCliente,
             @RequestParam(value = "dataVendaInicio", required = false) Date dataVendaInicio,
             @RequestParam(value = "dataVendaFim", required = false) Date dataVendaFim) throws ExceptionMentoriaJava {
-        var retorno = vendaCompraLojaVirtualService.listarVendasPorProduto(idProduto, nomeProduto, nomeCliente, dataVendaInicio, dataVendaFim);
+        var retorno = vendaCompraLojaVirtualService.listarVendasPorProduto(idProduto, nomeProduto, nomeCliente, idCliente, dataVendaInicio, dataVendaFim);
 
         return ResponseEntity.ok(retorno.stream().map(VendaCompraLojaVirtualExibirDTO :: new).toList());
     }

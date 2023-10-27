@@ -108,6 +108,9 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.PUT, "vendaLoja/reativarLogicamente/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "vendaLoja/listarVendaDinamica/**").hasRole("USER")
 
+                        /* Permissões para Status Rastreio */
+                        .requestMatchers(HttpMethod.GET,"statusRastreio/listar/**").hasRole("USER")
+
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()
                 )

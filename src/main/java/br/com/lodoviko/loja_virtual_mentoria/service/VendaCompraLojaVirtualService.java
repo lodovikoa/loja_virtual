@@ -112,23 +112,27 @@ public class VendaCompraLojaVirtualService {
     * Listar todas as vendas que pussui um determinado produto.
     * Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.produto.id = ?1")
     *  */
-    public List<VendaCompraLojaVirtual> listarVendasPorProduto(int idProduto, String nomeProduto, String nomeCliente, Date dataVendaInicio, Date dataVendaFim) throws ExceptionMentoriaJava {
+    public List<VendaCompraLojaVirtual> listarVendasPorProduto(int idProduto, String nomeProduto, String nomeCliente, Long idCliente, Date dataVendaInicio, Date dataVendaFim) throws ExceptionMentoriaJava {
         var retorno = new ArrayList<VendaCompraLojaVirtual>();
 
         if(idProduto != -1 ) {
-            if(nomeProduto != null || nomeCliente != null || dataVendaInicio != null || dataVendaFim != null )
-                throw new ExceptionMentoriaJava("Não informar outros parametros junto com o idProduto");
+            if(nomeProduto != null || nomeCliente != null || idCliente != null || dataVendaInicio != null || dataVendaFim != null )
+                throw new ExceptionMentoriaJava("Foi informado mais parametros do esperado. Esperado somente UM parametro");
            retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualRepository.listarVendasPorIdProduto(Long.valueOf(idProduto));
         } else if(nomeProduto != null) {
-            if(idProduto != -1 || nomeCliente != null || dataVendaInicio != null || dataVendaFim != null )
-                throw new ExceptionMentoriaJava("Não informar outros parametros junto com o nomeProduto");
+            if(idProduto != -1 || nomeCliente != null  || idCliente != null ||  dataVendaInicio != null || dataVendaFim != null )
+                throw new ExceptionMentoriaJava("Foi informado mais parametros do esperado. Esperado somente UM parametro");
             retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualRepository.listarVendasPorNomeProduto(nomeProduto.trim());
         } else if(nomeCliente != null) {
-            if (idProduto != -1 || nomeProduto != null || dataVendaInicio != null || dataVendaFim != null)
-                throw new ExceptionMentoriaJava("Não informar outros parametros junto com o nomeCliente");
+            if (idProduto != -1 || nomeProduto != null || idCliente != null || dataVendaInicio != null || dataVendaFim != null)
+                throw new ExceptionMentoriaJava("Foi informado mais parametros do esperado. Esperado somente UM parametro");
             retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualRepository.listarVendasPorNomeCliente(nomeCliente.trim());
+        } else if(idCliente != null) {
+            if (idProduto != -1 || nomeProduto != null || nomeCliente != null || dataVendaInicio != null || dataVendaFim != null)
+                throw new ExceptionMentoriaJava("Foi informado mais parametros do esperado. Esperado somente UM parametro");
+            retorno = (ArrayList<VendaCompraLojaVirtual>) vendaCompraLojaVirtualRepository.listarVendasPorIdCliente(idCliente);
         } else if(dataVendaInicio != null && dataVendaFim != null) {
-            if (idProduto != -1 || nomeProduto != null || nomeCliente != null )
+            if (idProduto != -1 || nomeProduto != null || nomeCliente != null || idCliente != null )
                 throw new ExceptionMentoriaJava("Não informar outros parametros junto com o dataVendaInicio e dataVendaFim.");
             retorno = vendaCompraLojaVirtualRepository.listarPorDataVenda(dataVendaInicio, dataVendaFim);
         }else {
