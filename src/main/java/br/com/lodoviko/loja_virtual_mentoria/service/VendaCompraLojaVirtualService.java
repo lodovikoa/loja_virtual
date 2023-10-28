@@ -47,6 +47,7 @@ public class VendaCompraLojaVirtualService {
         vendaCompraLojaVirtual.setEnderecoCobranca(enderecoCobranca);
 
         vendaCompraLojaVirtual.setPessoa(pessoa);
+        vendaCompraLojaVirtual.setExcluido(false);
 
         // Ajustar os produtos informados na venda
         for(int i = 0; i < vendaCompraLojaVirtual.getItensVendaLoja().size(); i++) {

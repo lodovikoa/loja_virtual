@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface NotaFiscalVendaRepository extends JpaRepository<NotaFiscalVenda, Long> {
 
@@ -16,4 +18,7 @@ public interface NotaFiscalVendaRepository extends JpaRepository<NotaFiscalVenda
     @Modifying
     @Query("delete from NotaFiscalVenda n where n.vendaCompraLojaVirtual is null")
     void excluirTodasNotaFiscalSemVendaAssociada();
+
+    @Query(value = "from NotaFiscalVenda n where n.vendaCompraLojaVirtual.id = ?1")
+    List<NotaFiscalVenda> buscarNotaFiscalPorVenda(Long idVenda);
 }

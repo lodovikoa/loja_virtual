@@ -6,6 +6,8 @@ import br.com.lodoviko.loja_virtual_mentoria.repository.FormaPagamentoRepository
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @AllArgsConstructor
 @Service
 public class FormaPagamentoService {
@@ -27,5 +29,9 @@ public class FormaPagamentoService {
         }
 
         return formaPagamentoRepository.save(formaPagamento);
+    }
+
+    public List<FormaPagamento> listarFormasPagamentoPorEmpresa(Long idEmpresa) {
+        return formaPagamentoRepository.listarFormasPagamentoPorEmpresa(idEmpresa);
     }
 }

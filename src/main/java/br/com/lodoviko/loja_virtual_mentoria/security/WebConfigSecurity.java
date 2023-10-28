@@ -99,6 +99,7 @@ public class WebConfigSecurity {
 
                         /* Permissão para Forma de Pagamento */
                         .requestMatchers(HttpMethod.POST, "formaPagamento/cadastrar").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "formaPagamento/listar/idEmpresa/*").hasRole("USER")
 
                         /* Permissão para Vendas da Loja Virtual */
                         .requestMatchers(HttpMethod.POST, "vendaLoja/cadastrar").hasRole("USER")
@@ -110,6 +111,12 @@ public class WebConfigSecurity {
 
                         /* Permissões para Status Rastreio */
                         .requestMatchers(HttpMethod.GET,"statusRastreio/listar/**").hasRole("USER")
+
+                        /* Permissões para Nota Fiscal de Venda */
+                        .requestMatchers(HttpMethod.GET, "notaFiscalVenda/idVenda/*").hasRole("USER")
+
+                        /* Permissões para Cupom de Desconto  */
+                        .requestMatchers(HttpMethod.GET, "cupomDesconto/listar/idEmpresa/*").hasRole("USER")
 
                          /* Nega todas as demais solicitações */
                         .anyRequest().denyAll()
