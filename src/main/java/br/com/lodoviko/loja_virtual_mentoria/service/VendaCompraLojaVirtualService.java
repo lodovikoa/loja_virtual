@@ -1,15 +1,16 @@
 package br.com.lodoviko.loja_virtual_mentoria.service;
 
+import br.com.lodoviko.loja_virtual_mentoria.enuns.StatusContaReceber;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
-import br.com.lodoviko.loja_virtual_mentoria.model.Endereco;
-import br.com.lodoviko.loja_virtual_mentoria.model.PessoaFisica;
-import br.com.lodoviko.loja_virtual_mentoria.model.StatusRastreio;
-import br.com.lodoviko.loja_virtual_mentoria.model.VendaCompraLojaVirtual;
+import br.com.lodoviko.loja_virtual_mentoria.model.*;
 import br.com.lodoviko.loja_virtual_mentoria.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +23,10 @@ public class VendaCompraLojaVirtualService {
     private final PessoaFisicaRepository pessoaFisicaRepository;
     private final StatusRastreioRepository statusRastreioRepository;
     private final NotaFiscalVendaRepository notaFiscalVendaRepository;
+    private final ContaReceberRepository contaReceberRepository;
+    private final EmailSendService emailSendService;
 
-    public VendaCompraLojaVirtual salvar(VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava {
+    public VendaCompraLojaVirtual salvar(VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava, MessagingException, UnsupportedEncodingException {
         if(vendaCompraLojaVirtual.getId() != null) {
             throw new ExceptionMentoriaJava("Não informar o ID no cadastro de Venda de Produto.");
         }
@@ -57,8 +60,50 @@ public class VendaCompraLojaVirtualService {
 
         vendaCompraLojaVirtual = vendaCompraLojaVirtualRepository.save(vendaCompraLojaVirtual);
 
+        // Registrar conta a receber
+        ContaReceber contaReceber = new ContaReceber();
+        contaReceber.setDescricao("Venda da loja virtual numero: " + vendaCompraLojaVirtual.getId());
+        contaReceber.setDtPagamento(Calendar.getInstance().getTime());
+        contaReceber.setDtVencimento(Calendar.getInstance().getTime());
+        contaReceber.setEmpresa(vendaCompraLojaVirtual.getEmpresa());
+        contaReceber.setPessoa(vendaCompraLojaVirtual.getPessoa());
+        contaReceber.setStatus(StatusContaReceber.QUITADA);
+        contaReceber.setValorDesconto(vendaCompraLojaVirtual.getValorDesconto());
+        contaReceber.setValorTotal(vendaCompraLojaVirtual.getValorTotal());
+
+        contaReceberRepository.save(contaReceber);
+
         StatusRastreio statusRastreio = new StatusRastreio(null,"Loja Local", "Local", "ES", "Venda Inicial", vendaCompraLojaVirtual, vendaCompraLojaVirtual.getEmpresa());
         statusRastreioRepository.save(statusRastreio);
+        vendaCompraLojaVirtualRepository.flush();
+
+        // Enviar email para o cliente comprador
+        StringBuilder msgEmail = new StringBuilder();
+        msgEmail.append("Ola, ")
+                .append(vendaCompraLojaVirtual.getPessoa().getNome())
+                .append("</br>")
+                .append("Você realizo a compra de número: ")
+                .append(vendaCompraLojaVirtual.getId())
+                .append("</br>")
+                .append("Na loja: ")
+                .append(vendaCompraLojaVirtual.getEmpresa().getNomeFantasia())
+                .append("<br>")
+                .append("Obrigado!");
+        emailSendService.enviarEmailHtml("Compra Realizada", msgEmail.toString(), vendaCompraLojaVirtual.getPessoa().getEmail());
+
+        // Enviar email para o vendedor
+        msgEmail = new StringBuilder();
+        msgEmail.append("Ola, ")
+                .append(vendaCompraLojaVirtual.getEmpresa().getEmail())
+                .append("</br>")
+                .append("Venda realizada número: ")
+                .append(vendaCompraLojaVirtual.getId())
+                .append("</br>")
+                .append("Para: ")
+                .append(vendaCompraLojaVirtual.getPessoa().getNome())
+                .append("</br>")
+                .append("Sucesso....");
+        emailSendService.enviarEmailHtml("Venda Realizada",msgEmail.toString(), vendaCompraLojaVirtual.getEmpresa().getEmail());
 
         return vendaCompraLojaVirtual;
     }
