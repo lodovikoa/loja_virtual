@@ -12,4 +12,6 @@ public interface CupomDescontoRepository extends JpaRepository<CupomDesconto, Lo
 
     @Query(value = "from CupomDesconto c where c.empresa.id = ?1")
     List<CupomDesconto> listarCupomDescontoPorEmpresa(Long idEmpresa);
+
+    boolean existsById(Long id);
 }

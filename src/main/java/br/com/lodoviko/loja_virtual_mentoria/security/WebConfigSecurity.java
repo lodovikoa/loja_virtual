@@ -116,6 +116,10 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.GET, "notaFiscalVenda/idVenda/*").hasRole("USER")
 
                         /* Permissões para Cupom de Desconto  */
+                        .requestMatchers(HttpMethod.POST, "cupomDesconto/cadastrar").hasRole("USER")
+                        .requestMatchers(HttpMethod.PUT, "cupomDesconto/alterar").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, "cupomDesconto/excluir").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "cupomDesconto/buscarPorId/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "cupomDesconto/listar/idEmpresa/*").hasRole("USER")
 
                          /* Nega todas as demais solicitações */
