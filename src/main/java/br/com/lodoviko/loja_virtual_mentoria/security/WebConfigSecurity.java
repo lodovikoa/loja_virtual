@@ -75,6 +75,7 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.DELETE, "/notaFiscalCompra/excluir/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/notaFiscalCompra/descricao/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/notaFiscalCompra/id/*").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, "notaFiscalCompra/relatorioProdutoNFCompra/**").hasRole("USER")
 
                         /* Permissões para Nota Item Produto - notaItemProduto */
                         .requestMatchers(HttpMethod.POST, "/notaItemProduto").hasRole("USER")

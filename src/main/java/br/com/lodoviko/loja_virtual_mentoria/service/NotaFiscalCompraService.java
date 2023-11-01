@@ -2,11 +2,15 @@ package br.com.lodoviko.loja_virtual_mentoria.service;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.NotaFiscalCompra;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioProdutoCompraNotaFiscalDTO;
 import br.com.lodoviko.loja_virtual_mentoria.repository.NotaFiscalCompraRepository;
 import br.com.lodoviko.loja_virtual_mentoria.repository.NotaItemProdutoRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +20,8 @@ public class NotaFiscalCompraService {
 
     private final NotaFiscalCompraRepository notaFiscalCompraRepository;
     private final NotaItemProdutoRepository notaItemProdutoRepository;
+
+    private JdbcTemplate jdbcTemplate;
 
 
     // Cadastrar
@@ -118,5 +124,26 @@ public class NotaFiscalCompraService {
         }
 
         return  notaFiscalCompraRepository.findByDescricaoObsContaining(descricao.trim());
+    }
+
+    public List<RelatorioProdutoCompraNotaFiscalDTO> gerarRelatorioProdCompraNota(String nomeProduto, LocalDate dataInicial, LocalDate dataFinal, Long codigoNota, Long codigoProduto) {
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("select p.id as codigoProduto ")
+                .append(", p.nome as nomeProduto ")
+                .append(", p.valor_venda as valorVendaProduto ")
+                .append(", ntp.quantidade as quantidadeComprada ")
+                .append(", pj.id as codigoFornecedor ")
+                .append(", pj.nome as nomeFornecedor ")
+                .append(", cfc.data_compra as dataCompra ")
+                .append(" from tb_nota_fiscal_compra cfc ")
+                .append(" inner join tb_nota_item_produto ntp on ntp.nota_fiscal_compra_id = cfc.id ")
+                .append(" inner join tb_produto p on p.id = ntp.produto_id ")
+                .append(" inner join tb_pessoa_juridica pj on pj.id = cfc.pessoa_id ")
+                .append(" where ")
+                .append(" cfc.data_compra >= '") .append(dataInicial) .append("' and cfc.data_compra <= '") .append(dataFinal).append("';");
+
+        var retorno = jdbcTemplate.query(sql.toString(),new BeanPropertyRowMapper(RelatorioProdutoCompraNotaFiscalDTO.class));
+        return retorno;
     }
 }
