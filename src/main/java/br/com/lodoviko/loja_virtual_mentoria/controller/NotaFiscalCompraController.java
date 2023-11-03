@@ -3,6 +3,7 @@ package br.com.lodoviko.loja_virtual_mentoria.controller;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.NotaFiscalCompraCadastrarDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.NotaFiscalCompraExibirDTO;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioProdutoAlertaEstoqueDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioProdutoCompraNotaFiscalDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.NotaFiscalCompraService;
 import jakarta.validation.Valid;
@@ -70,16 +71,27 @@ public class NotaFiscalCompraController {
         return ResponseEntity.ok(retorno.toList());
     }
 
-    // Relatório
     @GetMapping("relatorioProdutoNFCompra")
     public ResponseEntity<List<RelatorioProdutoCompraNotaFiscalDTO>> relatorioProdutoCompraNotaFiscLal(
             @RequestParam(value = "nomeProduto", required = false) String nomeProduto,
-            @RequestParam(value = "dataInicial", required = false) LocalDate dataInicial,
-            @RequestParam(value = "dataFinal", required = false) LocalDate dataFinal,
+            @RequestParam(value = "dataInicial", required = true) LocalDate dataInicial,
+            @RequestParam(value = "dataFinal", required = true) LocalDate dataFinal,
             @RequestParam(value = "codigoNota", required = false) Long codigoNota,
             @RequestParam(value = "codigoProduto", required = false) Long codigoProduto) throws ExceptionMentoriaJava {
 
         var retorno = notaFiscalCompraService.gerarRelatorioProdCompraNota(nomeProduto, dataInicial, dataFinal, codigoNota, codigoProduto);
+        return ResponseEntity.ok(retorno);
+    }
+
+    @GetMapping("relatorioProdutoAlertaEstoque")
+    public ResponseEntity<List<RelatorioProdutoAlertaEstoqueDTO>> relatorioProdutoAlertaEstoque(
+            @RequestParam(value = "nomeProduto", required = false) String nomeProduto,
+            @RequestParam(value = "dataInicial", required = true) LocalDate dataInicial,
+            @RequestParam(value = "dataFinal", required = true) LocalDate dataFinal,
+            @RequestParam(value = "codigoNota", required = false) Long codigoNota,
+            @RequestParam(value = "codigoProduto", required = false) Long codigoProduto) throws ExceptionMentoriaJava {
+
+        var retorno = notaFiscalCompraService.gerarRelatorioProdutoAlertaEstoque(nomeProduto, dataInicial, dataFinal, codigoNota, codigoProduto);
         return ResponseEntity.ok(retorno);
     }
 

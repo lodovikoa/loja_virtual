@@ -2,6 +2,7 @@ package br.com.lodoviko.loja_virtual_mentoria.service;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.NotaFiscalCompra;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioProdutoAlertaEstoqueDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioProdutoCompraNotaFiscalDTO;
 import br.com.lodoviko.loja_virtual_mentoria.repository.NotaFiscalCompraRepository;
 import br.com.lodoviko.loja_virtual_mentoria.repository.NotaItemProdutoRepository;
@@ -126,6 +127,17 @@ public class NotaFiscalCompraService {
         return  notaFiscalCompraRepository.findByDescricaoObsContaining(descricao.trim());
     }
 
+    /**
+     * Este relatório permite saber os produtos comprados para serem vendidos pela loja virtual,
+     * todos os produtos tem relação com a Nota Fiscal de Compra
+     *
+     * @param nomeProduto
+     * @param dataInicial
+     * @param dataFinal
+     * @param codigoNota
+     * @param codigoProduto
+     * @return List<RelatorioProdutoCompraNotaFiscalDTO>
+     */
     public List<RelatorioProdutoCompraNotaFiscalDTO> gerarRelatorioProdCompraNota(String nomeProduto, LocalDate dataInicial, LocalDate dataFinal, Long codigoNota, Long codigoProduto) {
 
         StringBuilder sql = new StringBuilder();
@@ -141,9 +153,56 @@ public class NotaFiscalCompraService {
                 .append(" inner join tb_produto p on p.id = ntp.produto_id ")
                 .append(" inner join tb_pessoa_juridica pj on pj.id = cfc.pessoa_id ")
                 .append(" where ")
-                .append(" cfc.data_compra >= '") .append(dataInicial) .append("' and cfc.data_compra <= '") .append(dataFinal).append("';");
+                .append(" cfc.data_compra >= '") .append(dataInicial) .append("' and cfc.data_compra <= '") .append(dataFinal).append("' ");
+
+        if(codigoProduto != null && codigoProduto > 0) {
+            sql.append(" and p.id = ").append(codigoProduto);
+        }
+        if(codigoNota != null && codigoNota > 0) {
+            sql.append(" and cfc.id = ").append(codigoNota);
+        }
+        if(nomeProduto != null && nomeProduto.trim().length() > 0) {
+            sql.append(" and p.nome like '%").append(nomeProduto).append("%'");
+        }
+
+        sql.append(";");
 
         var retorno = jdbcTemplate.query(sql.toString(),new BeanPropertyRowMapper(RelatorioProdutoCompraNotaFiscalDTO.class));
+        return retorno;
+    }
+
+    public List<RelatorioProdutoAlertaEstoqueDTO> gerarRelatorioProdutoAlertaEstoque(String nomeProduto, LocalDate dataInicial, LocalDate dataFinal, Long codigoNota, Long codigoProduto) throws ExceptionMentoriaJava {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select p.id as codigoProduto ")
+                .append(", p.nome as nomeProduto ")
+                .append(", p.valor_venda as valorVendaProduto ")
+                .append(", ntp.quantidade as quantidadeComprada ")
+                .append(", pj.id as codigoFornecedor ")
+                .append(", pj.nome as nomeFornecedor ")
+                .append(", cfc.data_compra as dataCompra ")
+                .append(", p.qtd_estoque as quantidadeEstoque ")
+                .append(", p.qtd_alerta_estoque as quantidadeAlertaEstoque ")
+                .append(" from tb_nota_fiscal_compra cfc ")
+                .append(" inner join tb_nota_item_produto ntp on ntp.nota_fiscal_compra_id = cfc.id ")
+                .append(" inner join tb_produto p on p.id = ntp.produto_id ")
+                .append(" inner join tb_pessoa_juridica pj on pj.id = cfc.pessoa_id ")
+                .append(" where ")
+                .append(" p.qtd_estoque <= p.qtd_alerta_estoque ")
+                .append(" and cfc.data_compra >= '") .append(dataInicial) .append("' and cfc.data_compra <= '") .append(dataFinal).append("' ");
+
+        if(codigoProduto != null && codigoProduto > 0) {
+            sql.append(" and p.id = ").append(codigoProduto);
+        }
+        if(codigoNota != null && codigoNota > 0) {
+            sql.append(" and cfc.id = ").append(codigoNota);
+        }
+        if(nomeProduto != null && nomeProduto.trim().length() > 0) {
+            sql.append(" and p.nome like '%").append(nomeProduto).append("%'");
+        }
+
+        sql.append(";");
+
+        var retorno = jdbcTemplate.query(sql.toString(),new BeanPropertyRowMapper(RelatorioProdutoAlertaEstoqueDTO.class));
         return retorno;
     }
 }
