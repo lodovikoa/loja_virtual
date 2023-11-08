@@ -1,5 +1,6 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
+import br.com.lodoviko.loja_virtual_mentoria.enuns.StatusVendaLojaVirtual;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.ItemVendaLojaExibirDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.ProdutoExibirReduzidoDTO;
 import jakarta.persistence.*;
@@ -74,6 +75,10 @@ public class VendaCompraLojaVirtual implements Serializable {
     @ManyToOne(targetEntity = PessoaJuridica.class)
     @JoinColumn(name = "empresa_id", nullable = false, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private PessoaJuridica empresa;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private StatusVendaLojaVirtual statusVendaLojaVirtual;
 
     @OneToMany(mappedBy = "vendaCompraLojaVirtual", orphanRemoval = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemVendaLoja> itensVendaLoja;

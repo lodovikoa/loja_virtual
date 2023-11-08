@@ -3,12 +3,16 @@ package br.com.lodoviko.loja_virtual_mentoria.service;
 import br.com.lodoviko.loja_virtual_mentoria.enuns.StatusContaReceber;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.model.*;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioStatusVendaDTO;
 import br.com.lodoviko.loja_virtual_mentoria.repository.*;
 import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +29,8 @@ public class VendaCompraLojaVirtualService {
     private final NotaFiscalVendaRepository notaFiscalVendaRepository;
     private final ContaReceberRepository contaReceberRepository;
     private final EmailSendService emailSendService;
+
+    private JdbcTemplate jdbcTemplate;
 
     public VendaCompraLojaVirtual salvar(VendaCompraLojaVirtual vendaCompraLojaVirtual) throws ExceptionMentoriaJava, MessagingException, UnsupportedEncodingException {
         if(vendaCompraLojaVirtual.getId() != null) {
@@ -188,8 +194,39 @@ public class VendaCompraLojaVirtualService {
         return retorno;
     }
 
-    /*
-    * Fazer consulta por intervalo de datas de venda
-    *
-    * */
+    public List<RelatorioStatusVendaDTO> gerarRelatorioStatusVenda(LocalDate dataInicial, LocalDate dataFinal, String statusVenda, String nomeProduto, String nomeCliente) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select p.id as codigoProduto ")
+                .append(", p.nome as nomeProduto ")
+                .append(", pf.email as emailCliente ")
+                .append(", pf.telefone as foneCliente ")
+                .append(", p.valor_venda as valorVendaProduto ")
+                .append(", pf.id as codigoCliente ")
+                .append(", pf.nome as nomeCliente ")
+                .append(", p.qtd_estoque as qtdEstoque ")
+                .append(", cfc.id as codigoVenda ")
+                .append(", cfc.status_Venda_loja_virtual as statusVenda ")
+                .append(" from tb_vd_cp_loja_virt cfc ")
+                .append(" inner join tb_item_venda_loja ntp on ntp.venda_compra_loja_virt_id = cfc.id ")
+                .append(" inner join tb_produto p on p.id = ntp.produto_id ")
+                .append(" inner join tb_pessoa_fisica pf on pf.id = cfc.pessoa_id ")
+                .append(" where cfc.data_venda >= '").append(dataInicial).append("' and cfc.data_venda <= '").append(dataFinal).append("' ");
+
+        if(statusVenda != null) {
+            sql.append(" and cfc.status_venda_loja_virtual = '").append(statusVenda).append("'");
+        }
+
+        if(nomeProduto != null) {
+            sql.append("and p.nome like '%").append(nomeProduto).append("%'");
+        }
+
+        if(nomeCliente != null) {
+            sql.append("and pf.nome like '%").append(nomeCliente).append("%'");
+        }
+
+        sql.append(";");
+
+        var retorno = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(RelatorioStatusVendaDTO.class));
+        return retorno;
+    }
 }

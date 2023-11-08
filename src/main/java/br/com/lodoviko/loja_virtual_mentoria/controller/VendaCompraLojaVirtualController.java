@@ -1,6 +1,7 @@
 package br.com.lodoviko.loja_virtual_mentoria.controller;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioStatusVendaDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.VendaCompraLojaVirtualCadastroDTO;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.VendaCompraLojaVirtualExibirDTO;
 import br.com.lodoviko.loja_virtual_mentoria.service.VendaCompraLojaVirtualService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -68,5 +70,19 @@ public class VendaCompraLojaVirtualController {
         var retorno = vendaCompraLojaVirtualService.listarVendasPorProduto(idProduto, nomeProduto, nomeCliente, idCliente, dataVendaInicio, dataVendaFim);
 
         return ResponseEntity.ok(retorno.stream().map(VendaCompraLojaVirtualExibirDTO :: new).toList());
+    }
+
+    @GetMapping("relatorioStatusVenda")
+    public ResponseEntity<List<RelatorioStatusVendaDTO>> relatorioStatusVenda(
+            @RequestParam(value = "dataInicial", required = true) LocalDate dataInicial,
+            @RequestParam(value = "dataFinal", required = true) LocalDate dataFinal,
+            @RequestParam(value = "statusVenda", required = false) String statusVenda,
+            @RequestParam(value = "nomeProduto", required = false) String nomeProduto,
+            @RequestParam(value = "nomeCliente", required = false) String nomeCliente
+            ) {
+
+        var retorno = vendaCompraLojaVirtualService.gerarRelatorioStatusVenda(dataInicial, dataFinal, statusVenda, nomeProduto, nomeCliente);
+
+        return ResponseEntity.ok(retorno);
     }
 }

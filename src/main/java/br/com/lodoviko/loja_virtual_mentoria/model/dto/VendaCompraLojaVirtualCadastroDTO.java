@@ -1,5 +1,6 @@
 package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
+import br.com.lodoviko.loja_virtual_mentoria.enuns.StatusVendaLojaVirtual;
 import br.com.lodoviko.loja_virtual_mentoria.model.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Min;
@@ -41,6 +42,9 @@ public record VendaCompraLojaVirtualCadastroDTO(
 
         @NotNull(message = "Faltou informar a Empresa")
         PessoaJuridica empresa,
+
+        @NotNull(message = "Status da Venda deve ser informado")
+        StatusVendaLojaVirtual statusVendaLojaVirtual,
         List<ItemVendaLoja> itensVendaLoja,
 
         @JsonIgnore
@@ -61,6 +65,7 @@ public record VendaCompraLojaVirtualCadastroDTO(
                 this.dataVenda,
                 this.dataEntrega,
                 this.empresa,
+                this.statusVendaLojaVirtual,
                 this.itensVendaLoja,
                 this.excluido
             );

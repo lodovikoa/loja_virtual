@@ -24,15 +24,6 @@ public class NotaFiscalCompraService {
 
     private JdbcTemplate jdbcTemplate;
 
-
-    // Cadastrar
-        /* Validações:
-        *  ID precisa ser nulo
-        *  Verificar se já existe descrição cadastrada
-        *  Obrigatório ter Pessoa associada
-        *  Obrigatório ter empresa associada
-        *  Obrigatório ter contPagar associada*/
-
     public NotaFiscalCompra cadastrar(NotaFiscalCompra notaFiscalCompra) throws ExceptionMentoriaJava {
 
         if(notaFiscalCompra.getId() != null) {

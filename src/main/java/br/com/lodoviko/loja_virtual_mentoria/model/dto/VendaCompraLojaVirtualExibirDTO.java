@@ -1,5 +1,6 @@
 package br.com.lodoviko.loja_virtual_mentoria.model.dto;
 
+import br.com.lodoviko.loja_virtual_mentoria.enuns.StatusVendaLojaVirtual;
 import br.com.lodoviko.loja_virtual_mentoria.model.CupomDesconto;
 import br.com.lodoviko.loja_virtual_mentoria.model.FormaPagamento;
 import br.com.lodoviko.loja_virtual_mentoria.model.NotaFiscalVenda;
@@ -23,6 +24,7 @@ public record VendaCompraLojaVirtualExibirDTO(
         Integer diaEntrega,
         Date dataVenda,
         Date dataEntrega,
+        StatusVendaLojaVirtual statusVendaLojaVirtual,
         Long idEmpresa,
         List<ItemVendaLojaExibirDTO> produtos
 ) {
@@ -40,7 +42,8 @@ public record VendaCompraLojaVirtualExibirDTO(
                vendaCompraLojaVirtual.getValorFrete(), 
                vendaCompraLojaVirtual.getDiaEntrega(), 
                vendaCompraLojaVirtual.getDataVenda(), 
-               vendaCompraLojaVirtual.getDataEntrega(), 
+               vendaCompraLojaVirtual.getDataEntrega(),
+               vendaCompraLojaVirtual.getStatusVendaLojaVirtual(),
                vendaCompraLojaVirtual.getEmpresa().getId(), 
                vendaCompraLojaVirtual.converterItens(vendaCompraLojaVirtual.getItensVendaLoja())
        );
