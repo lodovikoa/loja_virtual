@@ -227,6 +227,6 @@ public class VendaCompraLojaVirtualService {
         sql.append(";");
 
         var retorno = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(RelatorioStatusVendaDTO.class));
-        return retorno;
+        return retorno ;
     }
 }
