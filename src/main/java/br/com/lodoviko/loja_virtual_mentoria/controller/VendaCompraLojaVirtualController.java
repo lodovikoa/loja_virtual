@@ -1,10 +1,11 @@
 package br.com.lodoviko.loja_virtual_mentoria.controller;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.RelatorioStatusVendaDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.VendaCompraLojaVirtualCadastroDTO;
-import br.com.lodoviko.loja_virtual_mentoria.model.dto.VendaCompraLojaVirtualExibirDTO;
+import br.com.lodoviko.loja_virtual_mentoria.integracao.ApiTokenIntegracao;
+import br.com.lodoviko.loja_virtual_mentoria.model.dto.*;
 import br.com.lodoviko.loja_virtual_mentoria.service.VendaCompraLojaVirtualService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,16 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @AllArgsConstructor
@@ -84,5 +92,62 @@ public class VendaCompraLojaVirtualController {
         var retorno = vendaCompraLojaVirtualService.gerarRelatorioStatusVenda(dataInicial, dataFinal, statusVenda, nomeProduto, nomeCliente);
 
         return ResponseEntity.ok(retorno);
+    }
+
+    @PostMapping(value = "consultarFrete")
+    public ResponseEntity<List<MEnvioEmpresaTransporteDTO>> constarFrete(@RequestBody @Valid MEnvioConsultaFreteDTO consultaFreteDTO) throws IOException, InterruptedException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(consultaFreteDTO);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(ApiTokenIntegracao.URL_MELHOR_ENVIO_SANDBOX + "api/v2/me/shipment/calculate"))
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + ApiTokenIntegracao.TOKEN_MELHOR_ENVIO_SANDBOX)
+                .header("User-Agent", "lodoviko@gmail.com")
+                .method("POST", HttpRequest.BodyPublishers.ofString(json))
+                .build();
+        HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println(response.body());
+
+        JsonNode jsonNode = new ObjectMapper().readTree(response.body());
+        Iterator<JsonNode> iterator = jsonNode.iterator();
+
+        MEnvioEmpresaTransporteDTO empresaTransporteDTO = new MEnvioEmpresaTransporteDTO();
+        List<MEnvioEmpresaTransporteDTO> empresaTransporteDTOS = new ArrayList<>();
+
+        while (iterator.hasNext()) {
+            JsonNode node = iterator.next();
+
+            if(node.get("id") != null) {
+                empresaTransporteDTO.setId(node.get("id").asText());
+            }
+
+            if(node.get("name") != null) {
+                empresaTransporteDTO.setNome(node.get("name").asText());
+            }
+
+            if(node.get("price") != null) {
+                empresaTransporteDTO.setValor(node.get("price").asText());
+            }
+
+            if(node.get("company") != null) {
+                empresaTransporteDTO.setEmpresa(node.get("company").get("name").asText());
+                empresaTransporteDTO.setPicture(node.get("company").get("picture").asText());
+            }
+
+            if(node.get("error") != null) {
+                empresaTransporteDTO.setError(node.get("error").asText());
+            }
+
+            if(empresaTransporteDTO.dadosOK()) {
+                empresaTransporteDTOS.add(empresaTransporteDTO);
+            }
+            empresaTransporteDTO = new MEnvioEmpresaTransporteDTO();
+        }
+
+       // return new ResponseEntity<List<MEnvioEmpresaTransporteDTO>>(empresaTransporteDTOS,HttpStatus.OK);
+        return ResponseEntity.ok(empresaTransporteDTOS);
     }
 }

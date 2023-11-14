@@ -111,6 +111,7 @@ public class WebConfigSecurity {
                         .requestMatchers(HttpMethod.PUT, "vendaLoja/reativarLogicamente/*").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "vendaLoja/listarVendaDinamica/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "vendaLoja/relatorioStatusVenda/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "vendaLoja/consultarFrete").hasRole("USER")
 
                         /* Permissões para Status Rastreio */
                         .requestMatchers(HttpMethod.GET,"statusRastreio/listar/**").hasRole("USER")
