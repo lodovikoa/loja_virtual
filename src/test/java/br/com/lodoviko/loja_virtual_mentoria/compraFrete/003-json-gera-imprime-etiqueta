@@ -1,0 +1,46 @@
+
+/* --------------------------------------------------------------------*
+ *   JSON QUE GERA E IMPRIME AS ETIQUETAS                              *
+ * API: https://sandbox.melhorenvio.com.br/api/v2/me/shipment/generate *
+ *---------------------------------------------------------------------*/
+
+
+{
+   "orders":[
+      "9aa859f9-6401-4452-8db5-93a03c468868"
+   ]
+}
+
+
+/* --------------------------------------------------------*
+ *   JSON DO RETORNO DA AÇÃO DE gerar e imprimir etiquetas *
+ *--------------------------------------------------------*/
+
+{
+   "9aa859f9-6401-4452-8db5-93a03c468868":{
+      "status":true,
+      "message":"Envio gerado com sucesso"
+   }
+}
+
+----------------------------------------------------------------------------------------------------------
+
+/* --------------------------------------------------------------------*
+ *   JSON OBTER URL PARA IMPRIMIR ETIQUETAS                            *
+ * API: https://sandbox.melhorenvio.com.br/api/v2/me/shipment/print    *
+ *---------------------------------------------------------------------*/
+
+{
+   "mode":"private",
+   "orders":[
+      "9aa859f9-6401-4452-8db5-93a03c468868"
+   ]
+}
+
+/* ----------------------------------------------------------------------*
+ *   JSON DO RETORNO DA AÇÃO DE DEVOLVE A URL PARA IMPRIMIR AS ETIQUETAS *
+ *-----------------------------------------------------------------------*/
+
+{
+   "url":"https://sandbox.melhorenvio.com.br/imprimir/xbexpSuOvu1o"
+}

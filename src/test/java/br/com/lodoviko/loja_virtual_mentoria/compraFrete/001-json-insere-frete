@@ -1,0 +1,127 @@
+
+/* -------------------------------------------------------*
+ *   JSON QUE ENVIA OS DADOS PARA INSERIR FRETE           *
+ * API: https://sandbox.melhorenvio.com.br/api/v2/me/cart *
+ *--------------------------------------------------------*/
+
+{
+   "from":{
+      "postal_code":"96020360"
+   },
+   "to":{
+      "postal_code":"01018020"
+   },
+   "products":[
+      {
+         "id":"x",
+         "width":11,
+         "height":17,
+         "length":11,
+         "weight":0.3,
+         "insurance_value":10.1,
+         "quantity":1
+      },
+      {
+         "id":"y",
+         "width":16,
+         "height":25,
+         "length":11,
+         "weight":0.3,
+         "insurance_value":55.05,
+         "quantity":2
+      },
+      {
+         "id":"z",
+         "width":22,
+         "height":30,
+         "length":11,
+         "weight":1,
+         "insurance_value":30,
+         "quantity":1
+      }
+   ]
+}
+
+/* -------------------------------------------*
+ *   JSON DO RETORNO DA AÇÃO DE INSERIR FRETE *
+ *--------------------------------------------*/
+
+{
+   "id":"9aa859f9-6401-4452-8db5-93a03c468868",
+   "protocol":"ORD-202311113230",
+   "service_id":3,
+   "agency_id":49,
+   "contract":null,
+   "service_code":null,
+   "quote":51.65,
+   "price":51.65,
+   "coupon":null,
+   "discount":3.29,
+   "delivery_min":5,
+   "delivery_max":6,
+   "status":"pending",
+   "reminder":null,
+   "insurance_value":1000,
+   "weight":null,
+   "width":null,
+   "height":null,
+   "length":null,
+   "diameter":null,
+   "format":"box",
+   "billed_weight":3.5,
+   "receipt":false,
+   "own_hand":false,
+   "collect":false,
+   "collect_scheduled_at":null,
+   "reverse":0,
+   "non_commercial":false,
+   "authorization_code":null,
+   "tracking":null,
+   "self_tracking":null,
+   "delivery_receipt":null,
+   "additional_info":null,
+   "cte_key":null,
+   "paid_at":null,
+   "generated_at":null,
+   "posted_at":null,
+   "delivered_at":null,
+   "canceled_at":null,
+   "suspended_at":null,
+   "expired_at":null,
+   "created_at":"2023-11-20 11:09:06",
+   "updated_at":"2023-11-20 11:09:06",
+   "parse_pi_at":null,
+   "products":[
+      {
+         "name":"Papel adesivo para etiquetas 1",
+         "quantity":3,
+         "unitary_value":100,
+         "weight":null
+      },
+      {
+         "name":"Papel adesivo para etiquetas 2",
+         "quantity":1,
+         "unitary_value":700,
+         "weight":null
+      }
+   ],
+   "volumes":[
+      {
+         "id":117969,
+         "height":"10.00",
+         "width":"15.00",
+         "length":"20.00",
+         "diameter":"0.00",
+         "weight":"3.50",
+         "format":"box",
+         "created_at":"2023-11-20 11:09:07",
+         "updated_at":"2023-11-20 11:09:07"
+      }
+   ],
+   "tags":[
+      {
+         "tag":"Identifica\u00e7\u00e3o do pedido na plataforma, exemplo: 1000007",
+         "url":"Link direto para o pedido na plataforma, se poss\u00edvel, caso contr\u00e1rio pode ser passado o valor null"
+      }
+   ]
+}
