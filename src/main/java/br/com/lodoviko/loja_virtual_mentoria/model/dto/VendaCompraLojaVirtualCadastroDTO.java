@@ -48,7 +48,11 @@ public record VendaCompraLojaVirtualCadastroDTO(
         List<ItemVendaLoja> itensVendaLoja,
 
         @JsonIgnore
-        Boolean excluido
+        Boolean excluido,
+
+        String codigoEtiqueta,
+        String urlImprimeEtiqueta,
+        String servicoTransportadora
 ) {
     public VendaCompraLojaVirtual converterDTO() {
         return new VendaCompraLojaVirtual(this.id,
@@ -67,7 +71,10 @@ public record VendaCompraLojaVirtualCadastroDTO(
                 this.empresa,
                 this.statusVendaLojaVirtual,
                 this.itensVendaLoja,
-                this.excluido
+                this.excluido,
+                this.codigoEtiqueta,
+                this.urlImprimeEtiqueta,
+                this.servicoTransportadora
             );
     }
 }

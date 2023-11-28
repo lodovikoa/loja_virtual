@@ -26,7 +26,10 @@ public record VendaCompraLojaVirtualExibirDTO(
         Date dataEntrega,
         StatusVendaLojaVirtual statusVendaLojaVirtual,
         Long idEmpresa,
-        List<ItemVendaLojaExibirDTO> produtos
+        List<ItemVendaLojaExibirDTO> produtos,
+        String codigoEtiqueta,
+        String urlImprimeEtiqueta,
+        String servicoTransportadora
 ) {
    public VendaCompraLojaVirtualExibirDTO(VendaCompraLojaVirtual vendaCompraLojaVirtual) {
        this(
@@ -45,7 +48,10 @@ public record VendaCompraLojaVirtualExibirDTO(
                vendaCompraLojaVirtual.getDataEntrega(),
                vendaCompraLojaVirtual.getStatusVendaLojaVirtual(),
                vendaCompraLojaVirtual.getEmpresa().getId(), 
-               vendaCompraLojaVirtual.converterItens(vendaCompraLojaVirtual.getItensVendaLoja())
+               vendaCompraLojaVirtual.converterItens(vendaCompraLojaVirtual.getItensVendaLoja()),
+               vendaCompraLojaVirtual.getCodigoEtiqueta(),
+               vendaCompraLojaVirtual.getUrlImprimeEtiqueta(),
+               vendaCompraLojaVirtual.getServicoTransportadora()
        );
    }
 }

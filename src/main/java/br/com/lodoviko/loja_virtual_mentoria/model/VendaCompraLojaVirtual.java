@@ -84,6 +84,11 @@ public class VendaCompraLojaVirtual implements Serializable {
     private List<ItemVendaLoja> itensVendaLoja;
 
     private Boolean excluido = Boolean.FALSE;
+    private String codigoEtiqueta;
+    private String urlImprimeEtiqueta;
+
+    /* Frete que foi escolhido no momento da compra */
+    private String servicoTransportadora;
 
     public List<ItemVendaLojaExibirDTO> converterItens(List<ItemVendaLoja> itensVendaLoja) {
        List<ItemVendaLojaExibirDTO> itens = new ArrayList<>();
