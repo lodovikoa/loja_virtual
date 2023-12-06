@@ -2,6 +2,7 @@ package br.com.lodoviko.loja_virtual_mentoria.controller;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.integracao.ApiTokenIntegracao;
+import br.com.lodoviko.loja_virtual_mentoria.model.VendaCompraLojaVirtual;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.*;
 import br.com.lodoviko.loja_virtual_mentoria.service.VendaCompraLojaVirtualService;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -93,6 +94,39 @@ public class VendaCompraLojaVirtualController {
 
         return ResponseEntity.ok(retorno);
     }
+
+    @Transactional
+    @PostMapping(value = "imprimeCompraEtiquetaFrete")
+    public ResponseEntity<String> imprimeCompraEtiquetaFrete(@RequestBody Long idVenda) throws ExceptionMentoriaJava {
+
+        VendaCompraLojaVirtual compraLojaVirtual = vendaCompraLojaVirtualService.consultarPorId(idVenda);
+        if(compraLojaVirtual == null) {
+            return new ResponseEntity<String>("Venda não encontrada", HttpStatus.OK);
+        }
+
+        MEnvioEnvioEtiquetaDTO envioEnvioEtiquetaDTO = new MEnvioEnvioEtiquetaDTO();
+        envioEnvioEtiquetaDTO.setService(compraLojaVirtual.getServicoTransportadora());
+        envioEnvioEtiquetaDTO.setAgency("49");
+        envioEnvioEtiquetaDTO.getFrom().setName(compraLojaVirtual.getEmpresa().getNome());
+        envioEnvioEtiquetaDTO.getFrom().setPhone(compraLojaVirtual.getEmpresa().getTelefone());
+
+        envioEnvioEtiquetaDTO.getFrom().setEmail(compraLojaVirtual.getEmpresa().getEmail());
+        envioEnvioEtiquetaDTO.getFrom().setCompany_document(compraLojaVirtual.getEmpresa().getCnpj());
+        envioEnvioEtiquetaDTO.getFrom().setState_register(compraLojaVirtual.getEmpresa().getInscEstadual());
+        envioEnvioEtiquetaDTO.getFrom().setAddress(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getRuaLogra());
+        envioEnvioEtiquetaDTO.getFrom().setComplement(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getComplemento());
+        envioEnvioEtiquetaDTO.getFrom().setNumber(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getNumero());
+        envioEnvioEtiquetaDTO.getFrom().setDistrict(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getBairro());
+        envioEnvioEtiquetaDTO.getFrom().setCity(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getCidade());
+        envioEnvioEtiquetaDTO.getFrom().setCountry_id("BR");
+        envioEnvioEtiquetaDTO.getFrom().setPostal_code(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getCep());
+
+
+
+
+        return new ResponseEntity<String>("Sucesso", HttpStatus.OK);
+    }
+
 
     @PostMapping(value = "consultarFrete")
     public ResponseEntity<List<MEnvioEmpresaTransporteDTO>> constarFrete(@RequestBody @Valid MEnvioConsultaFreteDTO consultaFreteDTO) throws IOException, InterruptedException {
