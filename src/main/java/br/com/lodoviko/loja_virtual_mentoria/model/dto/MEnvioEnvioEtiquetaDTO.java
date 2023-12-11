@@ -22,5 +22,6 @@ public class MEnvioEnvioEtiquetaDTO implements Serializable {
     private MEnvioToEnvioEtiquetaDTO to = new MEnvioToEnvioEtiquetaDTO();
     private List<MEnvioProductsEnvioEtiquetaDTO> products =  new ArrayList<>();
     private List<MEnvioVolumesEnvioEtiquetaDTO> volumes = new ArrayList<>();
+    private MEnvioOptionsEnvioEtiquetaDTO options = new MEnvioOptionsEnvioEtiquetaDTO();
 
 }

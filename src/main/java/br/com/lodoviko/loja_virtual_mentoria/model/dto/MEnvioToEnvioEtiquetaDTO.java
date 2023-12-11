@@ -15,6 +15,7 @@ public class MEnvioToEnvioEtiquetaDTO implements Serializable {
 
     private String name;
     private String phone;
+    private String email;
     private String document;
     private String company_document;
     private String state_register;

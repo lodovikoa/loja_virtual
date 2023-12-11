@@ -2,6 +2,7 @@ package br.com.lodoviko.loja_virtual_mentoria.controller;
 
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.integracao.ApiTokenIntegracao;
+import br.com.lodoviko.loja_virtual_mentoria.model.ItemVendaLoja;
 import br.com.lodoviko.loja_virtual_mentoria.model.VendaCompraLojaVirtual;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.*;
 import br.com.lodoviko.loja_virtual_mentoria.service.VendaCompraLojaVirtualService;
@@ -107,9 +108,9 @@ public class VendaCompraLojaVirtualController {
         MEnvioEnvioEtiquetaDTO envioEnvioEtiquetaDTO = new MEnvioEnvioEtiquetaDTO();
         envioEnvioEtiquetaDTO.setService(compraLojaVirtual.getServicoTransportadora());
         envioEnvioEtiquetaDTO.setAgency("49");
+
         envioEnvioEtiquetaDTO.getFrom().setName(compraLojaVirtual.getEmpresa().getNome());
         envioEnvioEtiquetaDTO.getFrom().setPhone(compraLojaVirtual.getEmpresa().getTelefone());
-
         envioEnvioEtiquetaDTO.getFrom().setEmail(compraLojaVirtual.getEmpresa().getEmail());
         envioEnvioEtiquetaDTO.getFrom().setCompany_document(compraLojaVirtual.getEmpresa().getCnpj());
         envioEnvioEtiquetaDTO.getFrom().setState_register(compraLojaVirtual.getEmpresa().getInscEstadual());
@@ -120,9 +121,55 @@ public class VendaCompraLojaVirtualController {
         envioEnvioEtiquetaDTO.getFrom().setCity(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getCidade());
         envioEnvioEtiquetaDTO.getFrom().setCountry_id("BR");
         envioEnvioEtiquetaDTO.getFrom().setPostal_code(compraLojaVirtual.getEmpresa().getEnderecos().get(0).getCep());
+        envioEnvioEtiquetaDTO.getFrom().setNote("Não há");
 
+        envioEnvioEtiquetaDTO.getTo().setName(compraLojaVirtual.getPessoa().getNome());
+        envioEnvioEtiquetaDTO.getTo().setPhone(compraLojaVirtual.getPessoa().getTelefone());
+        envioEnvioEtiquetaDTO.getTo().setEmail(compraLojaVirtual.getPessoa().getEmail());
+        envioEnvioEtiquetaDTO.getTo().setDocument(compraLojaVirtual.getPessoa().getCpf());
+        envioEnvioEtiquetaDTO.getTo().setAddress(compraLojaVirtual.getPessoa().enderecoEntrega().getRuaLogra());
+        envioEnvioEtiquetaDTO.getTo().setComplement(compraLojaVirtual.getPessoa().enderecoEntrega().getComplemento());
+        envioEnvioEtiquetaDTO.getTo().setNumber(compraLojaVirtual.getPessoa().enderecoEntrega().getNumero());
+        envioEnvioEtiquetaDTO.getTo().setDistrict(compraLojaVirtual.getPessoa().enderecoEntrega().getBairro());
+        envioEnvioEtiquetaDTO.getTo().setCity(compraLojaVirtual.getPessoa().enderecoEntrega().getCidade());
+        envioEnvioEtiquetaDTO.getTo().setState_abbr(compraLojaVirtual.getPessoa().enderecoEntrega().getUf());
+        envioEnvioEtiquetaDTO.getTo().setCountry_id("BR");
+        envioEnvioEtiquetaDTO.getTo().setPostal_code(compraLojaVirtual.getPessoa().enderecoEntrega().getCep());
+        envioEnvioEtiquetaDTO.getTo().setNote("Não há");
 
+        List<MEnvioProductsEnvioEtiquetaDTO> products = new ArrayList<>();
+        for (ItemVendaLoja itemVendaLoja : compraLojaVirtual.getItensVendaLoja()) {
+            MEnvioProductsEnvioEtiquetaDTO dto = new MEnvioProductsEnvioEtiquetaDTO();
 
+            dto.setName(itemVendaLoja.getProduto().getNome());
+            dto.setQuantity(itemVendaLoja.getQuantidade() + "");
+            dto.setUnitary_value(itemVendaLoja.getProduto().getValorVenda() + "");
+
+            products.add(dto);
+        }
+
+        envioEnvioEtiquetaDTO.setProducts(products);
+
+        List<MEnvioVolumesEnvioEtiquetaDTO> volumes = new ArrayList<>();
+        for (ItemVendaLoja itemVendaLoja : compraLojaVirtual.getItensVendaLoja()) {
+            MEnvioVolumesEnvioEtiquetaDTO dto = new MEnvioVolumesEnvioEtiquetaDTO();
+
+            dto.setHeight(itemVendaLoja.getProduto().getAltura() + "");
+            dto.setLength(itemVendaLoja.getProduto().getProfundidade() + "");
+            dto.setWeight(itemVendaLoja.getProduto().getPeso() + "");
+            dto.setWidth(itemVendaLoja.getProduto().getLargura() + "");
+
+            volumes.add(dto);
+        }
+
+        envioEnvioEtiquetaDTO.setVolumes(volumes);
+
+        envioEnvioEtiquetaDTO.getOptions().setInsurance_value(compraLojaVirtual.getValorTotal() + "");
+        envioEnvioEtiquetaDTO.getOptions().setReceipt("false");
+        envioEnvioEtiquetaDTO.getOptions().setOwn_hand("false");
+        envioEnvioEtiquetaDTO.getOptions().setReverse("false");
+        envioEnvioEtiquetaDTO.getOptions().setNon_comercial("false");
+        envioEnvioEtiquetaDTO.getOptions().getInvoice().setKey(compraLojaVirtual.getNotaFiscalVenda().getNumero());
 
         return new ResponseEntity<String>("Sucesso", HttpStatus.OK);
     }

@@ -1,5 +1,6 @@
 package br.com.lodoviko.loja_virtual_mentoria.model;
 
+import br.com.lodoviko.loja_virtual_mentoria.enuns.TipoEndereco;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -44,5 +45,17 @@ public abstract class Pessoa implements Serializable {
     @ManyToOne(targetEntity = Pessoa.class)
     @JoinColumn(name = "empresa_id", nullable = true, foreignKey = @ForeignKey(value = ConstraintMode.CONSTRAINT, name = "empresa_id_fk"))
     private Pessoa empresa;
+
+    public Endereco enderecoEntrega() {
+        Endereco enderecoReturn = null;
+
+        for (Endereco endereco : enderecos) {
+            if(endereco.getTipoEndereco().name().equals(TipoEndereco.ENTREGA)) {
+                enderecoReturn = endereco;
+            }
+        }
+
+        return enderecoReturn;
+    }
 
 }
