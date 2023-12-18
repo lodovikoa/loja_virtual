@@ -84,7 +84,11 @@ public class VendaCompraLojaVirtual implements Serializable {
     private List<ItemVendaLoja> itensVendaLoja;
 
     private Boolean excluido = Boolean.FALSE;
+
+    @Column(name = "codigo_etiqueta")
     private String codigoEtiqueta;
+
+    @Column(name = "url_imprime_etiqueta")
     private String urlImprimeEtiqueta;
 
     /* Frete que foi escolhido no momento da compra */

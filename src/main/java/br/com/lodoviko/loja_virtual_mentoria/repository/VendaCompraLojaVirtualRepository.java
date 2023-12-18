@@ -42,4 +42,12 @@ public interface VendaCompraLojaVirtualRepository extends JpaRepository<VendaCom
 
     @Query("select i.vendaCompraLojaVirtual from ItemVendaLoja i where i.vendaCompraLojaVirtual.excluido = false and i.vendaCompraLojaVirtual.dataVenda between ?1 and ?2")
     ArrayList<VendaCompraLojaVirtual> listarPorDataVenda(Date dataVendaInicio, Date dataVendaFim);
+
+    @Modifying(flushAutomatically = true)
+    @Query(nativeQuery = true, value = "update tb_vd_cp_loja_virt set codigo_etiqueta = ?1 where id = ?2")
+    void updateEtiqueta(String idEtiqueta, Long id);
+
+    @Modifying(flushAutomatically = true)
+    @Query(nativeQuery = true, value = "update tb_vd_cp_loja_virt set url_imprime_etiqueta = ?1 where id = ?2")
+    void updateUrlEtiqueta(String urlEtiqueta, Long id);
 }

@@ -98,7 +98,7 @@ public class VendaCompraLojaVirtualController {
 
     @Transactional
     @PostMapping(value = "imprimeCompraEtiquetaFrete")
-    public ResponseEntity<String> imprimeCompraEtiquetaFrete(@RequestBody Long idVenda) throws ExceptionMentoriaJava {
+    public ResponseEntity<String> imprimeCompraEtiquetaFrete(@RequestBody Long idVenda) throws ExceptionMentoriaJava, IOException, InterruptedException {
 
         VendaCompraLojaVirtual compraLojaVirtual = vendaCompraLojaVirtualService.consultarPorId(idVenda);
         if(compraLojaVirtual == null) {
@@ -170,6 +170,91 @@ public class VendaCompraLojaVirtualController {
         envioEnvioEtiquetaDTO.getOptions().setReverse("false");
         envioEnvioEtiquetaDTO.getOptions().setNon_comercial("false");
         envioEnvioEtiquetaDTO.getOptions().getInvoice().setKey(compraLojaVirtual.getNotaFiscalVenda().getNumero());
+        envioEnvioEtiquetaDTO.getOptions().setPlatform(compraLojaVirtual.getEmpresa().getNomeFantasia());
+
+        MEnvioTagsEnvioDTO dtoTagEnvio = new MEnvioTagsEnvioDTO();
+        dtoTagEnvio.setTag("Identificação do pedido na plataforma, exemplo: " + compraLojaVirtual.getId());
+        dtoTagEnvio.setUrl(null);
+
+        envioEnvioEtiquetaDTO.getOptions().getTags().add(dtoTagEnvio);
+
+        // Converter Object em Json
+        String jsonEnvio = new ObjectMapper().writeValueAsString(envioEnvioEtiquetaDTO);
+
+        /* Insere as etiquetas do Frete */
+        HttpRequest requestEtiqueta = HttpRequest.newBuilder()
+                .uri(URI.create(ApiTokenIntegracao.URL_MELHOR_ENVIO_SANDBOX + "api/v2/me/cart"))
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + ApiTokenIntegracao.TOKEN_MELHOR_ENVIO_SANDBOX)
+                .header("User-Agent", "lodoviko@gmail.com")
+                .method("POST", HttpRequest.BodyPublishers.ofString(jsonEnvio))
+                .build();
+        HttpResponse<String> responseEtiqueta = HttpClient.newHttpClient().send(requestEtiqueta, HttpResponse.BodyHandlers.ofString());
+
+        // Tratar a resposta da API
+        JsonNode jsonNode = new ObjectMapper().readTree(responseEtiqueta.body());
+        Iterator<JsonNode> iterator = jsonNode.iterator();
+
+        String idEtiqueta = "";
+        while ((iterator.hasNext())) {
+            JsonNode node = iterator.next();
+            idEtiqueta = node.get("id").asText();
+            break;
+        }
+
+        // Salvar código da Etiqueta
+        vendaCompraLojaVirtualService.updateEtiqueta(idEtiqueta, compraLojaVirtual.getId());
+
+        /* Faz a compra do Frete para a etiqueta */
+        HttpRequest requestCompraFrete = HttpRequest.newBuilder()
+                .uri(URI.create(ApiTokenIntegracao.URL_MELHOR_ENVIO_SANDBOX + "api/v2/me/shipment/checkout"))
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + ApiTokenIntegracao.TOKEN_MELHOR_ENVIO_SANDBOX)
+                .header("User-Agent", "lodoviko@gmail.com")
+                .method("POST", HttpRequest.BodyPublishers.ofString("{ \"orders\": [ \"" + idEtiqueta + "\" ] }"))
+                .build();
+        HttpResponse<String> responseCompraFrete = HttpClient.newHttpClient().send(requestCompraFrete, HttpResponse.BodyHandlers.ofString());
+
+        if(responseCompraFrete.statusCode() != 200) {
+            return new ResponseEntity<String>("Não foi possível realizar a compra da Etiqueta.", HttpStatus.OK);
+        }
+
+        /* Gera as etiquetas */
+        HttpRequest requestGeraEtiqueta = HttpRequest.newBuilder()
+                .uri(URI.create(ApiTokenIntegracao.URL_MELHOR_ENVIO_SANDBOX + "api/v2/me/shipment/generate"))
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + ApiTokenIntegracao.TOKEN_MELHOR_ENVIO_SANDBOX)
+                .header("User-Agent", "lodoviko@gmail.com")
+                .method("POST", HttpRequest.BodyPublishers.ofString("{ \"orders\": [ \"" + idEtiqueta + "\" ] }"))
+                .build();
+        HttpResponse<String> responseGeraEtiqueta = HttpClient.newHttpClient().send(requestGeraEtiqueta, HttpResponse.BodyHandlers.ofString());
+
+        if(responseGeraEtiqueta.statusCode() != 200) {
+            return new ResponseEntity<String>("Não foi possível gerar a Etiqueta.", HttpStatus.OK);
+        }
+
+        /* Faz impressao das etiquetas */
+        HttpRequest requestImprimeEtiqueta = HttpRequest.newBuilder()
+                .uri(URI.create(ApiTokenIntegracao.URL_MELHOR_ENVIO_SANDBOX + "api/v2/me/shipment/print"))
+                .header("Accept", "application/json")
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + ApiTokenIntegracao.TOKEN_MELHOR_ENVIO_SANDBOX)
+                .header("User-Agent", "lodoviko@gmail.com")
+                .method("POST", HttpRequest.BodyPublishers.ofString("{ \"mode\": \"private\", \"orders\": [ \"" + idEtiqueta + "\" ] }"))
+                .build();
+        HttpResponse<String> responseImprimeEtiqueta = HttpClient.newHttpClient().send(requestImprimeEtiqueta, HttpResponse.BodyHandlers.ofString());
+
+        if(responseImprimeEtiqueta.statusCode() != 200) {
+            return new ResponseEntity<String>("Não foi possível imprimir a Etiqueta.", HttpStatus.OK);
+        }
+
+        String urlEtiqueta = responseImprimeEtiqueta.body();
+
+        vendaCompraLojaVirtualService.updateUrlEtiqueta(urlEtiqueta, compraLojaVirtual.getId());
+
 
         return new ResponseEntity<String>("Sucesso", HttpStatus.OK);
     }

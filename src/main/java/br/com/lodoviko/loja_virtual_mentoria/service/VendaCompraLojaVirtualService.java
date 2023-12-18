@@ -229,4 +229,12 @@ public class VendaCompraLojaVirtualService {
         var retorno = jdbcTemplate.query(sql.toString(), new BeanPropertyRowMapper(RelatorioStatusVendaDTO.class));
         return retorno ;
     }
+
+    public void updateEtiqueta(String idEtiqueta, Long id) {
+        vendaCompraLojaVirtualRepository.updateEtiqueta(idEtiqueta, id);
+    }
+
+    public void updateUrlEtiqueta(String urlEtiqueta, Long id) {
+        vendaCompraLojaVirtualRepository.updateUrlEtiqueta(urlEtiqueta, id);
+    }
 }
