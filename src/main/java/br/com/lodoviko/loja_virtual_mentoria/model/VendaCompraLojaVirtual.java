@@ -92,6 +92,7 @@ public class VendaCompraLojaVirtual implements Serializable {
     private String urlImprimeEtiqueta;
 
     /* Frete que foi escolhido no momento da compra */
+    @Column(name = "servico_transportadora")
     private String servicoTransportadora;
 
     public List<ItemVendaLojaExibirDTO> converterItens(List<ItemVendaLoja> itensVendaLoja) {

@@ -97,8 +97,8 @@ public class VendaCompraLojaVirtualController {
     }
 
     @Transactional
-    @PostMapping(value = "imprimeCompraEtiquetaFrete")
-    public ResponseEntity<String> imprimeCompraEtiquetaFrete(@RequestBody Long idVenda) throws ExceptionMentoriaJava, IOException, InterruptedException {
+    @PostMapping(value = "imprimeCompraEtiquetaFrete/{idVenda}")
+    public ResponseEntity<String> imprimeCompraEtiquetaFrete(@PathVariable Long idVenda) throws ExceptionMentoriaJava, IOException, InterruptedException {
 
         VendaCompraLojaVirtual compraLojaVirtual = vendaCompraLojaVirtualService.consultarPorId(idVenda);
         if(compraLojaVirtual == null) {
