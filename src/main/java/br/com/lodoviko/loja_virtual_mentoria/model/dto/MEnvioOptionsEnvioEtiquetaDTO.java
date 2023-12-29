@@ -16,9 +16,9 @@ public class MEnvioOptionsEnvioEtiquetaDTO implements Serializable {
     private static  final long serialVersionUID = 1L;
 
     private String insurance_value;
-    private String receipt;
-    private String own_hand;
-    private String reverse;
+    private Boolean receipt;
+    private Boolean own_hand;
+    private Boolean reverse;
     private String non_comercial;
     private MEnvioInvoiceEnvioDTO invoice = new MEnvioInvoiceEnvioDTO();
     private String platform;

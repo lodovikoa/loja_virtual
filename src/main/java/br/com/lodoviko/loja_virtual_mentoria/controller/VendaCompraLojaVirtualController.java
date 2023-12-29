@@ -3,6 +3,7 @@ package br.com.lodoviko.loja_virtual_mentoria.controller;
 import br.com.lodoviko.loja_virtual_mentoria.exception.ExceptionMentoriaJava;
 import br.com.lodoviko.loja_virtual_mentoria.integracao.ApiTokenIntegracao;
 import br.com.lodoviko.loja_virtual_mentoria.model.ItemVendaLoja;
+import br.com.lodoviko.loja_virtual_mentoria.model.NotaFiscalVenda;
 import br.com.lodoviko.loja_virtual_mentoria.model.VendaCompraLojaVirtual;
 import br.com.lodoviko.loja_virtual_mentoria.model.dto.*;
 import br.com.lodoviko.loja_virtual_mentoria.service.VendaCompraLojaVirtualService;
@@ -127,14 +128,14 @@ public class VendaCompraLojaVirtualController {
         envioEnvioEtiquetaDTO.getTo().setPhone(compraLojaVirtual.getPessoa().getTelefone());
         envioEnvioEtiquetaDTO.getTo().setEmail(compraLojaVirtual.getPessoa().getEmail());
         envioEnvioEtiquetaDTO.getTo().setDocument(compraLojaVirtual.getPessoa().getCpf());
-        envioEnvioEtiquetaDTO.getTo().setAddress(compraLojaVirtual.getPessoa().enderecoEntrega().getRuaLogra());
-        envioEnvioEtiquetaDTO.getTo().setComplement(compraLojaVirtual.getPessoa().enderecoEntrega().getComplemento());
-        envioEnvioEtiquetaDTO.getTo().setNumber(compraLojaVirtual.getPessoa().enderecoEntrega().getNumero());
-        envioEnvioEtiquetaDTO.getTo().setDistrict(compraLojaVirtual.getPessoa().enderecoEntrega().getBairro());
-        envioEnvioEtiquetaDTO.getTo().setCity(compraLojaVirtual.getPessoa().enderecoEntrega().getCidade());
-        envioEnvioEtiquetaDTO.getTo().setState_abbr(compraLojaVirtual.getPessoa().enderecoEntrega().getUf());
+        envioEnvioEtiquetaDTO.getTo().setAddress(compraLojaVirtual.getEnderecoEntrega().getRuaLogra());
+        envioEnvioEtiquetaDTO.getTo().setComplement(compraLojaVirtual.getEnderecoEntrega().getComplemento());
+        envioEnvioEtiquetaDTO.getTo().setNumber(compraLojaVirtual.getEnderecoEntrega().getNumero());
+        envioEnvioEtiquetaDTO.getTo().setDistrict(compraLojaVirtual.getEnderecoEntrega().getBairro());
+        envioEnvioEtiquetaDTO.getTo().setCity(compraLojaVirtual.getEnderecoEntrega().getCidade());
+        envioEnvioEtiquetaDTO.getTo().setState_abbr(compraLojaVirtual.getEnderecoEntrega().getUf());
         envioEnvioEtiquetaDTO.getTo().setCountry_id("BR");
-        envioEnvioEtiquetaDTO.getTo().setPostal_code(compraLojaVirtual.getPessoa().enderecoEntrega().getCep());
+        envioEnvioEtiquetaDTO.getTo().setPostal_code(compraLojaVirtual.getEnderecoEntrega().getCep());
         envioEnvioEtiquetaDTO.getTo().setNote("Não há");
 
         List<MEnvioProductsEnvioEtiquetaDTO> products = new ArrayList<>();
@@ -165,11 +166,15 @@ public class VendaCompraLojaVirtualController {
         envioEnvioEtiquetaDTO.setVolumes(volumes);
 
         envioEnvioEtiquetaDTO.getOptions().setInsurance_value(compraLojaVirtual.getValorTotal() + "");
-        envioEnvioEtiquetaDTO.getOptions().setReceipt("false");
-        envioEnvioEtiquetaDTO.getOptions().setOwn_hand("false");
-        envioEnvioEtiquetaDTO.getOptions().setReverse("false");
+        envioEnvioEtiquetaDTO.getOptions().setReceipt(Boolean.FALSE);
+        envioEnvioEtiquetaDTO.getOptions().setOwn_hand(Boolean.FALSE);
+        envioEnvioEtiquetaDTO.getOptions().setReverse(Boolean.FALSE);
         envioEnvioEtiquetaDTO.getOptions().setNon_comercial("false");
-        envioEnvioEtiquetaDTO.getOptions().getInvoice().setKey(compraLojaVirtual.getNotaFiscalVenda().getNumero());
+
+        NotaFiscalVenda notaFiscalVenda = new NotaFiscalVenda();
+        // Fazer consulta de NF de venda
+
+        envioEnvioEtiquetaDTO.getOptions().getInvoice().setKey("55.001.12345");
         envioEnvioEtiquetaDTO.getOptions().setPlatform(compraLojaVirtual.getEmpresa().getNomeFantasia());
 
         MEnvioTagsEnvioDTO dtoTagEnvio = new MEnvioTagsEnvioDTO();
